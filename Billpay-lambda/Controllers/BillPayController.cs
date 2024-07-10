@@ -1,4 +1,5 @@
-﻿using Billpay_lambda.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using Billpay_lambda.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Billpay_lambda.Controllers;
@@ -19,9 +20,9 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-nearby-terminal")]
-    public IActionResult SearchTerminals(double lat, double lng)
+    public IActionResult SearchTerminals([Required] double latitude, [Required] double longitude)
     {
-        var result = billPayservice.GetTerminal(lat, lng);
+        var result = billPayservice.GetTerminal(latitude, longitude);
 
         if (result.Success)
             return Ok(result.Data);
