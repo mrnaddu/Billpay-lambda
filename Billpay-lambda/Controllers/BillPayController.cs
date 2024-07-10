@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Billpay_lambda.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/bill-pay")]
 [ApiController]
 public class BillPayController : ControllerBase
 {
@@ -24,15 +24,9 @@ public class BillPayController : ControllerBase
         var result = billPayservice.GetTerminal(lat, lng);
 
         if (result.Success)
-        {
-            var atmDto = result.Data;
-            return Ok(atmDto);
-        }
+            return Ok(result.Data);
         else
-        {
-            logger.LogWarning($"Failed to fetch nearby ATM terminal: {result.Message}");
             return StatusCode(500, new { ErrorMessage = result.Message });
-        }
     }
 
     [HttpGet]

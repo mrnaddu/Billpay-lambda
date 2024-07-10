@@ -23,7 +23,7 @@ public class BillPayManager
         }
         catch (Exception ex)
         {
-            return ResultDto<AtmDto>.FailureResult($"An unexpected error occurred while fetching nearby ATM terminals. Please try again later. Exception: {ex.Message}");
+            return ResultDto<AtmDto>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }
