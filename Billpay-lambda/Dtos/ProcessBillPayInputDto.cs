@@ -9,5 +9,4 @@ public class ProcessBillPayInputDto
     public Guid BillerId { get; set; }
     public Guid TransactionId { get; set; }
     public int ScreenId { get; set; }
-    public ScreenDataInputDto ScreenData { get; set; }
 }
