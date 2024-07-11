@@ -2,7 +2,6 @@
 
 public class ScreenDataInputDto
 {
-    public List<DataElementInputDto> DataElement { get; set; }
-    public List<ExtraInfoInputDto> ExtraInfo { get; set; }
-    public DenominatorDto Denominator { get; set; }
+    public List<DataElementDto> DataElements { get; set; }
+    public ExtraInfoDto ExtraInfo { get; set; }
 }

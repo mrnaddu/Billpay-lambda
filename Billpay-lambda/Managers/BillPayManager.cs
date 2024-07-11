@@ -56,8 +56,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.BillerInfoId == input.BillerId).FirstOrDefault();
-
+            var matchingBillers = billerList.Where(biller => biller.BillerInfoId == input.BillerId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {input.BillerId}");
             if (matchingBillers.ExtraDataRequired == false)
             {
                 var response = new ProcessBillPayDto

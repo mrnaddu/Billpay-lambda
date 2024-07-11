@@ -1,6 +1,6 @@
 ﻿namespace Billpay_lambda.Dtos;
 
-public class DataElementInputDto
+public class ComplianceInputDto
 {
     public string Label { get; set; }
     public bool IsRequired { get; set; }
