@@ -1,4 +1,4 @@
-﻿namespace Billpay_lambda.Dtos;
+﻿namespace Billpay_lambda.OutputDtos;
 
 public class ResultDto<T>
 {

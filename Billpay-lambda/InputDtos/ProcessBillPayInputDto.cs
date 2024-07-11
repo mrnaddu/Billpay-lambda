@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Billpay_lambda.Dtos;
+namespace Billpay_lambda.InputDtos;
 
 public class ProcessBillPayInputDto
 {
@@ -8,5 +8,5 @@ public class ProcessBillPayInputDto
     [Required]
     public Guid BillerId { get; set; }
     public Guid TransactionId { get; set; }
-    public int ScreenId { get; set; }
+    public ScreenDataInputDto ScreenData { get; set; }
 }

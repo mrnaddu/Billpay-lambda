@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Billpay_lambda.Dtos;
+using Billpay_lambda.InputDtos;
 using Billpay_lambda.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

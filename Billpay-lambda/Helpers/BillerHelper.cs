@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Billpay_lambda.Dtos;
+using Billpay_lambda.OutputDtos;
 
 namespace Billpay_lambda.Helpers;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Billpay_lambda.Dtos;
+namespace Billpay_lambda.OutputDtos;
 
 public class BillerInfoDto
 {
