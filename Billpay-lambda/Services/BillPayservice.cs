@@ -29,4 +29,13 @@ public class BillPayservice : IBillPayservice
 
         return ResultDto<AtmDto>.FailureResult(result.Message);
     }
+
+    public ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input)
+    {
+        var result = billPayManager.ProcessBillpayDetails(input);
+        if (result.Success)
+            return ResultDto<ProcessBillPayDto>.SuccessResult(result.Data);
+
+        return ResultDto<ProcessBillPayDto>.FailureResult(result.Message);
+    }
 }

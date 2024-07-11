@@ -57,6 +57,10 @@ public class BillPayController : ControllerBase
     [Route("process-billpay")]
     public IActionResult ProcessBillpay(ProcessBillPayInputDto request)
     {
-        return Ok();
+        var result = billPayservice.ProcessBillpay(request);
+        if (result.Success)
+            return Ok(result.Data);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
     }
 }
