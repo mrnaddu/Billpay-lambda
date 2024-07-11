@@ -12,6 +12,15 @@ public class BillPayservice : IBillPayservice
         this.billPayManager = billPayManager;
     }
 
+    public ResultDto<BillerInfoDto> GetBillers(Guid terminalId)
+    {
+        var result = billPayManager.GetBillersByTerminal(terminalId);
+        if (result.Success)
+            return ResultDto<BillerInfoDto>.SuccessResult(result.Data);
+
+        return ResultDto<BillerInfoDto>.FailureResult(result.Message);
+    }
+
     public ResultDto<AtmDto> GetTerminal(double lat, double lng)
     {
         var result = billPayManager.GetNearByTerminal(lat, lng);

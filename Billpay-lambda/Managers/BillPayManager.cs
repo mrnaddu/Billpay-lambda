@@ -12,7 +12,7 @@ public class BillPayManager
         {
             var atmList = AtmHelper.GetAllAtms();
             if (atmList.Count == 0)
-                throw new NotFoundException();
+                throw new NotFoundException("There is error while fetching atm list");
 
             var matchingAtms = atmList.Where(atm => atm.Lat == lat && atm.Lng == lng).ToList();
 
@@ -24,6 +24,27 @@ public class BillPayManager
         catch (Exception ex)
         {
             return ResultDto<AtmDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<BillerInfoDto> GetBillersByTerminal(Guid terminalId)
+    {
+        try
+        {
+            var billerList = BillerHelper.GetAllBillers();
+            if (billerList.Count == 0)
+                throw new NotFoundException("There is error while fetching biller list");
+
+            var matchingBillers = billerList.Where(biller => biller.TerminalId == terminalId).ToList();
+
+            if (matchingBillers.Count == 0)
+                throw new NotFoundException($"Biller Not found for selected terminal {terminalId}");
+
+            return ResultDto<BillerInfoDto>.SuccessResult(matchingBillers.FirstOrDefault());
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<BillerInfoDto>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }

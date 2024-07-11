@@ -2,6 +2,7 @@
 
 public class AtmDto
 {
+    public Guid Id { get; set; }
     public string TermId { get; set; }
     public string TermNo { get; set; }
     public double Lat { get; set; }

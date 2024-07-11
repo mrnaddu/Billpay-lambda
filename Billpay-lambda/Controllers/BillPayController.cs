@@ -20,9 +20,21 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-nearby-terminal")]
-    public IActionResult SearchTerminals([Required] double latitude, [Required] double longitude)
+    public IActionResult SearchTerminal([Required] double latitude, [Required] double longitude)
     {
         var result = billPayservice.GetTerminal(latitude, longitude);
+
+        if (result.Success)
+            return Ok(result.Data);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpGet]
+    [Route("search-biller")]
+    public IActionResult SearchBiller(Guid terminalId)
+    {
+        var result = billPayservice.GetBillers(terminalId);
 
         if (result.Success)
             return Ok(result.Data);
