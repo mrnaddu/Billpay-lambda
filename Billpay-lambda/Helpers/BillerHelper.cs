@@ -3,11 +3,11 @@ using Billpay_lambda.OutputDtos;
 
 namespace Billpay_lambda.Helpers;
 
-public class BillerHelper
+public static class BillerHelper
 {
     private static readonly List<BillerInfoDto> billerInfoList =
     [
-        new BillerInfoDto
+        new ()
         {
             Id = 1,
             BillerInfoId = new Guid("03f7b867-3f3e-4fbb-961a-7fe4c9a9329f"),
@@ -17,7 +17,8 @@ public class BillerHelper
             TerminalId = new Guid("6b023e5b-06c5-4b1e-bc5d-6d46d0e3e3b6"),
             BillChoice = JsonDocument.Parse("{\"option\": \"Option A\"}").RootElement,
             BillerName = "Sample Biller Inc. A",
-            ExtraDataRequired = true,
+            IsCompilance = false,
+            IsExtraData = false,
             MaxStubs = 5,
             PaymentTypes = JsonDocument.Parse("[\"Credit Card\", \"Bank Transfer\"]").RootElement,
             CreatedDatetime = DateTime.UtcNow.AddDays(-7),
@@ -25,7 +26,7 @@ public class BillerHelper
             ModifiedDateTime = DateTime.UtcNow,
             ModifiedBy = "AdminUser"
         },
-        new BillerInfoDto
+        new ()
         {
             Id = 2,
             BillerInfoId = new Guid("d6b2e4a2-6c7f-493b-b12f-9d1d8fe1f3e3"),
@@ -35,7 +36,8 @@ public class BillerHelper
             TerminalId = new Guid("11fe1d45-5dc0-4c15-9e62-aa2c9dcb5053"),
             BillChoice = JsonDocument.Parse("{\"option\": \"Option B\"}").RootElement,
             BillerName = "Sample Biller Inc. B",
-            ExtraDataRequired = false,
+            IsCompilance = true,
+            IsExtraData = false,
             MaxStubs = 3,
             PaymentTypes = JsonDocument.Parse("[\"Debit Card\", \"PayPal\"]").RootElement,
             CreatedDatetime = DateTime.UtcNow.AddDays(-10),
@@ -43,7 +45,7 @@ public class BillerHelper
             ModifiedDateTime = DateTime.UtcNow,
             ModifiedBy = "AdminUser"
         },
-        new BillerInfoDto
+        new ()
         {
             Id = 3,
             BillerInfoId = new Guid("837f1232-b632-45d3-badf-68d5f9e9d6e1"),
@@ -53,7 +55,8 @@ public class BillerHelper
             TerminalId = new Guid("e2f1a89a-94f2-4f44-a7ab-d94c0b6a4b23"),
             BillChoice = JsonDocument.Parse("{\"option\": \"Option C\"}").RootElement,
             BillerName = "Sample Biller Inc. C",
-            ExtraDataRequired = true,
+            IsCompilance = false,
+            IsExtraData = true,
             MaxStubs = 8,
             PaymentTypes = JsonDocument.Parse("[\"Crypto Currency\", \"Google Pay\"]").RootElement,
             CreatedDatetime = DateTime.UtcNow.AddDays(-5),
@@ -61,7 +64,7 @@ public class BillerHelper
             ModifiedDateTime = DateTime.UtcNow,
             ModifiedBy = "AdminUser"
         },
-        new BillerInfoDto
+        new ()
         {
             Id = 4,
             BillerInfoId = new Guid("1dc05324-af2b-4d1c-b82c-43f432168184"),
@@ -71,7 +74,8 @@ public class BillerHelper
             TerminalId = new Guid("01d0e3b2-9242-4d64-9ebe-8911dcd1f7b1"),
             BillChoice = JsonDocument.Parse("{\"option\": \"Option D\"}").RootElement,
             BillerName = "Sample Biller Inc. D",
-            ExtraDataRequired = false,
+            IsCompilance = true,
+            IsExtraData = false,
             MaxStubs = 6,
             PaymentTypes = JsonDocument.Parse("[\"Apple Pay\", \"Venmo\"]").RootElement,
             CreatedDatetime = DateTime.UtcNow.AddDays(-3),

@@ -12,7 +12,8 @@ public class BillerInfoDto
     public Guid TerminalId { get; set; }
     public JsonElement BillChoice { get; set; }
     public string BillerName { get; set; }
-    public bool ExtraDataRequired { get; set; }
+    public bool IsExtraData { get; set; }
+    public bool IsCompilance { get; set; }
     public int MaxStubs { get; set; }
     public JsonElement PaymentTypes { get; set; }
     public DateTime CreatedDatetime { get; set; }

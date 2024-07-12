@@ -4,4 +4,5 @@ public class ScreenDataDto
 {
     public List<DataElementDto> DataElements { get; set; }
     public int ScreenId { get; set; }
+    public string ScreenType { get; set; }
 }
