@@ -28,7 +28,7 @@ public class BillPayManager
         }
     }
 
-    public ResultDto<BillerInfoDto> GetBillersByTerminal(Guid terminalId)
+    public ResultDto<List<BillerInfoDto>> GetBillersByTerminal(Guid terminalId)
     {
         try
         {
@@ -36,16 +36,32 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.TerminalId == terminalId).ToList();
+            var matchingBillers = billerList.Where(biller => biller.MerchantId == terminalId).ToList();
 
             if (matchingBillers.Count == 0)
                 throw new NotFoundException($"Biller Not found for selected terminal {terminalId}");
 
-            return ResultDto<BillerInfoDto>.SuccessResult(matchingBillers.FirstOrDefault());
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingBillers);
         }
         catch (Exception ex)
         {
-            return ResultDto<BillerInfoDto>.FailureResult($"Exception: {ex.Message}");
+            return ResultDto<List<BillerInfoDto>>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<List<BillerInfoDto>> GetTopBillers()
+    {
+        try
+        {
+            var billerList = BillerHelper.GetAllBillers();
+            if (billerList.Count == 0)
+                throw new NotFoundException("There is error while fetching biller list");
+
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(billerList);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<List<BillerInfoDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
 
@@ -53,6 +69,11 @@ public class BillPayManager
     {
         try
         {
+            if (input.IsTransactionSummary == true)
+            {
+                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary();
+                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
+            }
             var billerList = BillerHelper.GetAllBillers();
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");

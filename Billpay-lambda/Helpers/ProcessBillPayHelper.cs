@@ -19,6 +19,12 @@ public class ProcessBillPayHelper
         return compilance;
     }
 
+    public static ProcessBillPayDto GetTransactionSummary()
+    {
+        return transactionSummary;
+    }
+
+    // Details of each screen
     private static readonly ProcessBillPayDto withoutExtraData = new()
     {
         TerminalId = Guid.NewGuid(),
@@ -128,7 +134,7 @@ public class ProcessBillPayHelper
     {
         TerminalId = Guid.NewGuid(),
         BillerId = Guid.NewGuid(),
-        TransactionId = Guid.NewGuid(),
+        TransactionId = Guid.Empty,
         ScreenData = new ScreenDataDto
         {
             DataElements =
@@ -162,6 +168,60 @@ public class ProcessBillPayHelper
         ],
             ScreenId = 3,
             ScreenType = "Compilance"
+        },
+    };
+
+    private static readonly ProcessBillPayDto transactionSummary = new()
+    {
+        TerminalId = Guid.NewGuid(),
+        BillerId = Guid.NewGuid(),
+        TransactionId = Guid.NewGuid(),
+        ScreenData = new ScreenDataDto
+        {
+            DataElements =
+            [
+                new ()
+                {
+                    Id = "AmountDue",
+                    Label = "GetAmountDue",
+                    IsNumber = true,
+                    IsRequired = true,
+                    ElementType = "number",
+                    MaxLength = 15,
+                    MinLength = 5,
+                    WaterMark =string.Empty,
+                    Notification = null,
+                    ExtraInfo = null
+                },
+                new ()
+                {
+                    Id = "TotalFee",
+                    Label = "GetTotalFee",
+                    IsNumber = false,
+                    IsRequired = true,
+                    ElementType = "number",
+                    MaxLength = 0,
+                    MinLength = 0,
+                    WaterMark = "",
+                    Notification = null,
+                    ExtraInfo = null
+                },
+                 new ()
+                {
+                    Id = "AddBills",
+                    Label = "GetAddBills",
+                    IsNumber = false,
+                    IsRequired = true,
+                    ElementType = "number",
+                    MaxLength = 0,
+                    MinLength = 0,
+                    WaterMark = "",
+                    Notification = null,
+                    ExtraInfo = null
+                }
+                ],
+            ScreenId = 4,
+            ScreenType = "TransactionSummary"
         },
     };
 }

@@ -8,5 +8,6 @@ public class ProcessBillPayInputDto
     [Required]
     public Guid BillerId { get; set; }
     public Guid TransactionId { get; set; }
+    public bool IsTransactionSummary { get; set; }
     public ScreenDataInputDto ScreenData { get; set; }
 }

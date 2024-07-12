@@ -13,13 +13,13 @@ public class BillPayservice : IBillPayservice
         this.billPayManager = billPayManager;
     }
 
-    public ResultDto<BillerInfoDto> GetBillers(Guid terminalId)
+    public ResultDto<List<BillerInfoDto>> GetBillers(Guid terminalId)
     {
         var result = billPayManager.GetBillersByTerminal(terminalId);
         if (result.Success)
-            return ResultDto<BillerInfoDto>.SuccessResult(result.Data);
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(result.Data);
 
-        return ResultDto<BillerInfoDto>.FailureResult(result.Message);
+        return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
 
     public ResultDto<AtmDto> GetTerminal(double lat, double lng)
@@ -29,6 +29,11 @@ public class BillPayservice : IBillPayservice
             return ResultDto<AtmDto>.SuccessResult(result.Data);
 
         return ResultDto<AtmDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<List<BillerInfoDto>> GetTopBillers()
+    {
+        throw new NotImplementedException();
     }
 
     public ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input)

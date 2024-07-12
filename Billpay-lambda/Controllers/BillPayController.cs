@@ -39,9 +39,13 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-top-billers")]
-    public string TopBillers()
+    public IActionResult TopBillers()
     {
-        return "This is list of top billers";
+        var result = billPayservice.GetTopBillers();
+        if (result.Success)
+            return Ok(result.Data);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
     }
 
     [HttpGet]
