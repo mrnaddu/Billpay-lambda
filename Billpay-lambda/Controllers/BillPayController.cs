@@ -30,7 +30,7 @@ public class BillPayController : ControllerBase
     [Route("search-biller")]
     public IActionResult SearchBiller(Guid terminalId)
     {
-        var result = billPayservice.GetBillers(terminalId);
+        var result = billPayservice.GetAllBillers(terminalId);
         if (result.Success)
             return Ok(result.Data);
         else
@@ -53,6 +53,17 @@ public class BillPayController : ControllerBase
     public string BillersCategory()
     {
         return "This is list of top billers category";
+    }
+
+    [HttpGet]
+    [Route("get-biller")]
+    public IActionResult GetBiller(Guid billerId)
+    {
+        var result = billPayservice.GetBiller(billerId);
+        if (result.Success)
+            return Ok(result.Data);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
     }
 
     [HttpPost]

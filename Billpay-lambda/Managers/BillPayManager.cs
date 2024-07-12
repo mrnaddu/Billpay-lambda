@@ -65,6 +65,27 @@ public class BillPayManager
         }
     }
 
+    public ResultDto<BillerInfoDto> GetBiller(Guid billerId)
+    {
+        try
+        {
+            var billerList = BillerHelper.GetAllBillers();
+            if (billerList.Count == 0)
+                throw new NotFoundException("There is error while fetching biller list");
+
+            var matchingBillers = billerList.Where(biller => biller.BillerInfoId == billerId).ToList();
+
+            if (matchingBillers.Count == 0)
+                throw new NotFoundException($"Biller Not found {billerId}");
+
+            return ResultDto<BillerInfoDto>.SuccessResult(matchingBillers.FirstOrDefault());
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<BillerInfoDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
     public ResultDto<ProcessBillPayDto> ProcessBillpayDetails(ProcessBillPayInputDto input)
     {
         try

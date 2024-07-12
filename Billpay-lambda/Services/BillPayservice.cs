@@ -13,7 +13,16 @@ public class BillPayservice : IBillPayservice
         this.billPayManager = billPayManager;
     }
 
-    public ResultDto<List<BillerInfoDto>> GetBillers(Guid terminalId)
+    public ResultDto<BillerInfoDto> GetBiller(Guid billerId)
+    {
+        var result = billPayManager.GetBiller(billerId);
+        if (result.Success)
+            return ResultDto<BillerInfoDto>.SuccessResult(result.Data);
+
+        return ResultDto<BillerInfoDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<List<BillerInfoDto>> GetAllBillers(Guid terminalId)
     {
         var result = billPayManager.GetBillersByTerminal(terminalId);
         if (result.Success)
