@@ -20,7 +20,6 @@ public class BillPayController : ControllerBase
     public IActionResult SearchTerminal([Required] double latitude, [Required] double longitude)
     {
         var result = billPayservice.GetTerminal(latitude, longitude);
-
         if (result.Success)
             return Ok(result.Data);
         else
@@ -32,7 +31,6 @@ public class BillPayController : ControllerBase
     public IActionResult SearchBiller(Guid terminalId)
     {
         var result = billPayservice.GetBillers(terminalId);
-
         if (result.Success)
             return Ok(result.Data);
         else
