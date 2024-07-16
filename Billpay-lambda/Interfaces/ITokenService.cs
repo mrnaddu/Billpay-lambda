@@ -1,6 +1,8 @@
-﻿namespace Billpay_lambda.Interfaces;
+﻿using Billpay_lambda.OutputDtos;
+
+namespace Billpay_lambda.Interfaces;
 
 public interface ITokenService
 {
-    Task<string> GetClientToken(string clientId, string clientSecret);
+    ResultDto<string> GetClientToken(string clientId, string clientSecret);
 }

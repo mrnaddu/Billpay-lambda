@@ -1,10 +1,6 @@
-using Amazon.CognitoIdentityProvider;
-using Billpay_lambda.Helpers;
 using Billpay_lambda.Interfaces;
 using Billpay_lambda.Managers;
 using Billpay_lambda.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +15,7 @@ builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 // Add service dependencies
 builder.Services.AddTransient<IBillPayservice, BillPayservice>();
 builder.Services.AddTransient<BillPayManager>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 // Configure Swagger generator
 builder.Services.AddSwaggerGen(c =>
@@ -55,37 +52,6 @@ builder.Services.AddSwaggerGen(c =>
             });
 });
 
-// Setup AWS configuration and AWS Cognito Identity
-builder.Services.AddCognitoIdentity();
-var defaultOptions = Configuration.GetAWSOptions();
-var cognitotOptions = Configuration.GetAWSCognitoClientOptions();
-builder.Services.AddDefaultAWSOptions(defaultOptions);
-builder.Services.AddSingleton(cognitotOptions);
-builder.Services.AddSingleton(new CognitoClientSecretHelper(cognitotOptions));
-builder.Services.AddAWSService<IAmazonCognitoIdentityProvider>();
-
-// Setup authentication
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var authority = $"https://cognito-idp.us-east-1.amazonaws.com/{cognitotOptions.UserPoolId}";
-        var audience = cognitotOptions.UserPoolClientId;
-
-        options.Audience = audience;
-        options.Authority = authority;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = authority,
-            ValidAudience = audience,
-            IssuerSigningKey = new CognitoSigningKeyHelper(cognitotOptions.UserPoolClientSecret).ComputeKey()
-        };
-    });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -94,16 +60,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
-        c.RoutePrefix = "swagger";
-        c.OAuthClientId("swagger");
-        c.OAuthAppName("Swagger UI");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Billpay Web API");
     });
 }
 
 app.UseRouting();
-
-app.UseCors("OpenSeason");
 
 app.UseHttpsRedirection();
 
