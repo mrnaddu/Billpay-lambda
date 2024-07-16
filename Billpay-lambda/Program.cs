@@ -52,6 +52,17 @@ builder.Services.AddSwaggerGen(c =>
             });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(Configuration["App:CorsOrigins"],
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,6 +76,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseCors(Configuration["App:CorsOrigins"]);
 
 app.UseHttpsRedirection();
 
