@@ -21,7 +21,7 @@ public class BillPayController : ControllerBase
     {
         var result = billPayservice.GetTerminal(latitude, longitude);
         if (result.Success)
-            return Ok(result.Data);
+            return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
@@ -32,7 +32,7 @@ public class BillPayController : ControllerBase
     {
         var result = billPayservice.GetAllBillers(terminalId);
         if (result.Success)
-            return Ok(result.Data);
+            return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
@@ -43,7 +43,7 @@ public class BillPayController : ControllerBase
     {
         var result = billPayservice.GetTopBillers();
         if (result.Success)
-            return Ok(result.Data);
+            return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
@@ -61,7 +61,7 @@ public class BillPayController : ControllerBase
     {
         var result = billPayservice.GetBiller(billerId);
         if (result.Success)
-            return Ok(result.Data);
+            return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
@@ -72,7 +72,7 @@ public class BillPayController : ControllerBase
     {
         var result = billPayservice.ProcessBillpay(request);
         if (result.Success)
-            return Ok(result.Data);
+            return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }

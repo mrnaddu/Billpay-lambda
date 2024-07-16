@@ -1,6 +1,10 @@
+using Amazon.CognitoIdentityProvider;
+using Billpay_lambda.Helpers;
 using Billpay_lambda.Interfaces;
 using Billpay_lambda.Managers;
 using Billpay_lambda.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,43 +20,71 @@ builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 builder.Services.AddTransient<IBillPayservice, BillPayservice>();
 builder.Services.AddTransient<BillPayManager>();
 
-// Configure AWS Cognito
-builder.Services.AddAWSService<Amazon.CognitoIdentityProvider.IAmazonCognitoIdentityProvider>();
-
 // Configure Swagger generator
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-
-    // Configure Swagger to use JWT Bearer authentication with AWS Cognito
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT"
+        Title = "Billpay Web API",
+        Version = "v1"
     });
 
-    // Add JWT token to authorize requests
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
             {
-                new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference
+                    new OpenApiSecurityScheme
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                new List<string>()
-            }
-        });
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
 });
 
+// Setup AWS configuration and AWS Cognito Identity
+builder.Services.AddCognitoIdentity();
+var defaultOptions = Configuration.GetAWSOptions();
+var cognitotOptions = Configuration.GetAWSCognitoClientOptions();
+builder.Services.AddDefaultAWSOptions(defaultOptions);
+builder.Services.AddSingleton(cognitotOptions);
+builder.Services.AddSingleton(new CognitoClientSecretHelper(cognitotOptions));
+builder.Services.AddAWSService<IAmazonCognitoIdentityProvider>();
 
+// Setup authentication
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var authority = $"https://cognito-idp.us-east-1.amazonaws.com/{cognitotOptions.UserPoolId}";
+        var audience = cognitotOptions.UserPoolClientId;
+
+        options.Audience = audience;
+        options.Authority = authority;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = authority,
+            ValidAudience = audience,
+            IssuerSigningKey = new CognitoSigningKeyHelper(cognitotOptions.UserPoolClientSecret).ComputeKey()
+        };
+    });
 
 var app = builder.Build();
 
@@ -68,6 +100,10 @@ if (app.Environment.IsDevelopment())
         c.OAuthAppName("Swagger UI");
     });
 }
+
+app.UseRouting();
+
+app.UseCors("OpenSeason");
 
 app.UseHttpsRedirection();
 
