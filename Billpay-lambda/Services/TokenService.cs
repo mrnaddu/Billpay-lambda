@@ -1,5 +1,6 @@
 ﻿using Billpay_lambda.Consts;
 using Billpay_lambda.Interfaces;
+using Billpay_lambda.Models;
 using Billpay_lambda.OutputDtos;
 using Newtonsoft.Json;
 
@@ -31,17 +32,45 @@ public class TokenService : ITokenService
         }
     }
 
-    public ResultDto<string> GetUserAccessToken()
+    public ResultDto<AuthenticationResultDto> GetUserAccessToken(string userName, string password)
     {
         var client = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://cognito-idp.us-east-1.amazonaws.com/");
-        request.Headers.Add("X-Amz-Target", "AWSCognitoIdentityProviderService.InitiateAuth");
-        var content = new StringContent("{\r\n    \"AuthParameters\" : {\r\n        \"USERNAME\" : \"e4684468-3021-70e1-276a-ed00c6ab0498\",\r\n        \"PASSWORD\" : \"Raasoft@8310\"\r\n    },\r\n    \"AuthFlow\" : \"USER_PASSWORD_AUTH\",\r\n    \"ClientId\" : \"6t8lnsgp85b13ptq3071ojituf\"\r\n}", null, "application/x-amz-json-1.1");
+        var request = new HttpRequestMessage(HttpMethod.Post, TokenConst.user_access_token_url);
+        request.Headers.Add("X-Amz-Target", TokenConst.amz_target);
+        AuthParameters authParams = new()
+        {
+            USERNAME = userName, // e4684468-3021-70e1-276a-ed00c6ab0498
+            PASSWORD = password // Raasoft@8310
+        };
+
+        CognitoAuthRequest authRequest = new()
+        {
+            AuthParameters = authParams,
+            AuthFlow = TokenConst.auth_flow,
+            ClientId = TokenConst.client_id
+        };
+
+        string json = JsonConvert.SerializeObject(authRequest);
+        var content = new StringContent(json, null, "application/x-amz-json-1.1");
         request.Content = content;
         var response = client.Send(request);
         response.EnsureSuccessStatusCode();
-        Console.WriteLine(response.Content.ReadAsStringAsync().Result);
-        return ResultDto<string>.SuccessResult("");
 
+        if (!response.IsSuccessStatusCode)
+            return ResultDto<AuthenticationResultDto>.FailureResult("Token Not Be Generated");
+        else
+        {
+            string responseBody = response.Content.ReadAsStringAsync().Result;
+            var jsonResponse = JsonConvert.DeserializeObject<dynamic>(responseBody);
+            var result = new AuthenticationResultDto()
+            {
+                AccessToken = jsonResponse.AuthenticationResult.AccessToken,
+                IdToken = jsonResponse.AuthenticationResult.IdToken,
+                RefreshToken = jsonResponse.AuthenticationResult.RefreshToken,
+                ExpiresIn = jsonResponse.AuthenticationResult.ExpiresIn,
+                TokenType = jsonResponse.AuthenticationResult.TokenType
+            };
+            return ResultDto<AuthenticationResultDto>.SuccessResult(result);
+        }
     }
 }

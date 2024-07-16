@@ -27,9 +27,9 @@ public class TokenController : ControllerBase
 
     [HttpGet]
     [Route("get-user-token")]
-    public IActionResult GetUserToken()
+    public IActionResult GetUserToken([Required] string userName, [Required] string password)
     {
-        var result = tokenService.GetUserAccessToken();
+        var result = tokenService.GetUserAccessToken(userName, password);
         if (result.Success)
             return Ok(result);
         else
