@@ -24,4 +24,15 @@ public class TokenController : ControllerBase
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
+
+    [HttpGet]
+    [Route("get-user-token")]
+    public IActionResult GetUserToken()
+    {
+        var result = tokenService.GetUserAccessToken();
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
 }
