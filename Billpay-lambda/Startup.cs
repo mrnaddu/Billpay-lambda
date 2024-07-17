@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Billpay_lambda;
-
 public class Startup
 {
     public Startup(IConfiguration configuration)
@@ -126,6 +125,8 @@ public class Startup
                 c.OAuthScopeSeparator(" ");
             });
         }
+
+        app.UseCors();
 
         app.UseHttpsRedirection();
 
