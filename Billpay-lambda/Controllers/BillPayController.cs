@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Billpay_lambda.InputDtos;
 using Billpay_lambda.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Billpay_lambda.Controllers;
@@ -39,6 +40,7 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-top-billers")]
+    [Authorize]
     public IActionResult TopBillers()
     {
         var result = billPayservice.GetTopBillers();
