@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",
         new OpenApiInfo
         {
-            Title = "CognitoSampleApi",
+            Title = "Billpay Web API",
             Version = "v1"
         });
 
