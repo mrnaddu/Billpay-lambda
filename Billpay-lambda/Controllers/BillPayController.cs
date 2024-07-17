@@ -8,6 +8,7 @@ namespace Billpay_lambda.Controllers;
 
 [Route("api/bill-pay")]
 [ApiController]
+[Authorize]
 public class BillPayController : ControllerBase
 {
     private readonly IBillPayservice billPayservice;
@@ -40,7 +41,6 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-top-billers")]
-    [Authorize]
     public IActionResult TopBillers()
     {
         var result = billPayservice.GetTopBillers();
