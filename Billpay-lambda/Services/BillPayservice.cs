@@ -42,7 +42,11 @@ public class BillPayservice : IBillPayservice
 
     public ResultDto<List<BillerInfoDto>> GetTopBillers()
     {
-        throw new NotImplementedException();
+        var result = billPayManager.GetTopBillers();
+        if (result.Success)
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(result.Data);
+
+        return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
 
     public ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input)
@@ -52,5 +56,14 @@ public class BillPayservice : IBillPayservice
             return ResultDto<ProcessBillPayDto>.SuccessResult(result.Data);
 
         return ResultDto<ProcessBillPayDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<List<BillerInfoDto>> GetBillerCategory(string category)
+    {
+        var result = billPayManager.GetBillerCategory(category);
+        if (result.Success)
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(result.Data);
+
+        return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
 }

@@ -20,10 +20,10 @@ public class BillPayController : ControllerBase
     }
 
     [HttpGet]
-    [Route("get-nearby-terminal")]
+    [Route("get-nearby-terminals")]
     [SwaggerOperation(Summary = "Get nearby terminal")]
     [ProducesResponseType(typeof(List<AtmDto>), StatusCodes.Status200OK)]
-    public IActionResult SearchTerminal([Required] double latitude, [Required] double longitude)
+    public IActionResult SearchTerminals([Required] double latitude, [Required] double longitude)
     {
         var result = billPayservice.GetTerminal(latitude, longitude);
         if (result.Success)
@@ -36,7 +36,7 @@ public class BillPayController : ControllerBase
     [Route("search-billers")]
     [SwaggerOperation(Summary = "Search billers")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult SearchBiller(Guid terminalId)
+    public IActionResult SearchBillers(Guid terminalId)
     {
         var result = billPayservice.GetAllBillers(terminalId);
         if (result.Success)
@@ -49,22 +49,13 @@ public class BillPayController : ControllerBase
     [Route("get-top-billers")]
     [SwaggerOperation(Summary = "Get top billers")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult TopBillers()
+    public IActionResult GetTopBillers()
     {
         var result = billPayservice.GetTopBillers();
         if (result.Success)
             return Ok(result);
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
-    }
-
-    [HttpGet]
-    [Route("get-billers-category")]
-    [SwaggerOperation(Summary = "Get billers category")]
-    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public string BillersCategory()
-    {
-        return "This is list of top billers category";
     }
 
     [HttpGet]
@@ -87,6 +78,19 @@ public class BillPayController : ControllerBase
     public IActionResult ProcessBillpay(ProcessBillPayInputDto request)
     {
         var result = billPayservice.ProcessBillpay(request);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpGet]
+    [Route("get-biller-category")]
+    [SwaggerOperation(Summary = "Get biller category")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
+    public IActionResult GetBillerCategory(string category)
+    {
+        var result = billPayservice.GetBillerCategory(category);
         if (result.Success)
             return Ok(result);
         else

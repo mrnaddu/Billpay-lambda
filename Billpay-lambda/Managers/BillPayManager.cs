@@ -36,7 +36,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.MerchantId == terminalId).ToList();
+            var matchingBillers = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId).ToList();
 
             if (matchingBillers.Count == 0)
                 throw new NotFoundException($"Biller Not found for selected terminal {terminalId}");
@@ -73,7 +73,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.BillerInfoId == billerId).ToList();
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId).ToList();
 
             if (matchingBillers.Count == 0)
                 throw new NotFoundException($"Biller Not found {billerId}");
@@ -99,7 +99,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.BillerInfoId == input.BillerId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {input.BillerId}");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == input.BillerId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {input.BillerId}");
             if (matchingBillers.IsExtraData == false)
             {
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData();
@@ -119,6 +119,23 @@ public class BillPayManager
         catch (Exception ex)
         {
             return ResultDto<ProcessBillPayDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<List<BillerInfoDto>> GetBillerCategory(string category)
+    {
+        try
+        {
+            var billerList = BillerHelper.GetAllBillers();
+            if (billerList.Count == 0)
+                throw new NotFoundException("There is error while fetching biller category list");
+
+            var matchingCategory = billerList.Where(biller => biller.Industries.Any(industry => industry.IndustryName == category)).ToList();
+            return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingCategory);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<List<BillerInfoDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }

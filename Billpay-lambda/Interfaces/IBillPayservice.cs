@@ -10,4 +10,5 @@ public interface IBillPayservice
     ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input);
     ResultDto<List<BillerInfoDto>> GetTopBillers();
     ResultDto<BillerInfoDto> GetBiller(Guid billerId);
+    ResultDto<List<BillerInfoDto>> GetBillerCategory(string category);
 }
