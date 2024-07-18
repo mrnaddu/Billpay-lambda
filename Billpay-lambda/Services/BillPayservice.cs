@@ -31,13 +31,13 @@ public class BillPayservice : IBillPayservice
         return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
 
-    public ResultDto<AtmDto> GetTerminal(double lat, double lng)
+    public ResultDto<List<AtmDto>> GetTerminal(double lat, double lng)
     {
         var result = billPayManager.GetNearByTerminal(lat, lng);
         if (result.Success)
-            return ResultDto<AtmDto>.SuccessResult(result.Data);
+            return ResultDto<List<AtmDto>>.SuccessResult(result.Data);
 
-        return ResultDto<AtmDto>.FailureResult(result.Message);
+        return ResultDto<List<AtmDto>>.FailureResult(result.Message);
     }
 
     public ResultDto<List<BillerInfoDto>> GetTopBillers()

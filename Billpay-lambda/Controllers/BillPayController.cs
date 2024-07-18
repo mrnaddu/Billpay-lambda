@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Billpay_lambda.InputDtos;
 using Billpay_lambda.Interfaces;
+using Billpay_lambda.OutputDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Billpay_lambda.Controllers;
 
@@ -19,6 +21,8 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-nearby-terminal")]
+    [SwaggerOperation(Summary = "Get nearby terminal")]
+    [ProducesResponseType(typeof(List<AtmDto>), StatusCodes.Status200OK)]
     public IActionResult SearchTerminal([Required] double latitude, [Required] double longitude)
     {
         var result = billPayservice.GetTerminal(latitude, longitude);
@@ -29,7 +33,9 @@ public class BillPayController : ControllerBase
     }
 
     [HttpGet]
-    [Route("search-biller")]
+    [Route("search-billers")]
+    [SwaggerOperation(Summary = "Search billers")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
     public IActionResult SearchBiller(Guid terminalId)
     {
         var result = billPayservice.GetAllBillers(terminalId);
@@ -41,6 +47,8 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-top-billers")]
+    [SwaggerOperation(Summary = "Get top billers")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
     public IActionResult TopBillers()
     {
         var result = billPayservice.GetTopBillers();
@@ -52,6 +60,8 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-billers-category")]
+    [SwaggerOperation(Summary = "Get billers category")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
     public string BillersCategory()
     {
         return "This is list of top billers category";
@@ -59,6 +69,8 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-biller")]
+    [SwaggerOperation(Summary = "Get biller")]
+    [ProducesResponseType(typeof(BillerInfoDto), StatusCodes.Status200OK)]
     public IActionResult GetBiller(Guid billerId)
     {
         var result = billPayservice.GetBiller(billerId);
@@ -70,6 +82,8 @@ public class BillPayController : ControllerBase
 
     [HttpPost]
     [Route("process-billpay")]
+    [SwaggerOperation(Summary = "Process billpay")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
     public IActionResult ProcessBillpay(ProcessBillPayInputDto request)
     {
         var result = billPayservice.ProcessBillpay(request);

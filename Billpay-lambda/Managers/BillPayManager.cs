@@ -7,7 +7,7 @@ namespace Billpay_lambda.Managers;
 
 public class BillPayManager
 {
-    public ResultDto<AtmDto> GetNearByTerminal(double lat, double lng)
+    public ResultDto<List<AtmDto>> GetNearByTerminal(double lat, double lng)
     {
         try
         {
@@ -20,11 +20,11 @@ public class BillPayManager
             if (matchingAtms.Count == 0)
                 throw new NotFoundException($"Terminal Not found for the lattitude: {lat}, longitude: {lng}");
 
-            return ResultDto<AtmDto>.SuccessResult(matchingAtms.FirstOrDefault());
+            return ResultDto<List<AtmDto>>.SuccessResult(matchingAtms);
         }
         catch (Exception ex)
         {
-            return ResultDto<AtmDto>.FailureResult($"Exception: {ex.Message}");
+            return ResultDto<List<AtmDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
 

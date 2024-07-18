@@ -5,7 +5,7 @@ namespace Billpay_lambda.Interfaces;
 
 public interface IBillPayservice
 {
-    ResultDto<AtmDto> GetTerminal(double lat, double lng);
+    ResultDto<List<AtmDto>> GetTerminal(double lat, double lng);
     ResultDto<List<BillerInfoDto>> GetAllBillers(Guid terminalId);
     ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input);
     ResultDto<List<BillerInfoDto>> GetTopBillers();
