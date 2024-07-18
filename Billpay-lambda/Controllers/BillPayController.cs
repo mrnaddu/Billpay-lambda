@@ -96,4 +96,17 @@ public class BillPayController : ControllerBase
         else
             return StatusCode(500, new { ErrorMessage = result.Message });
     }
+
+    [HttpPost]
+    [Route("store-user-preference")]
+    [SwaggerOperation(Summary = "Store user preference")]
+    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
+    public IActionResult StoreUserPreference(UserPreferenceInputDto input)
+    {
+        var result = billPayservice.StoreUserPreference(input);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
 }

@@ -66,4 +66,13 @@ public class BillPayservice : IBillPayservice
 
         return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
+
+    public ResultDto<string> StoreUserPreference(UserPreferenceInputDto input)
+    {
+        var result = billPayManager.StoreUserPreference(input.UserInoId, input.TenantIds);
+        if (result.Success)
+            return ResultDto<string>.SuccessResult(result.Data);
+
+        return ResultDto<string>.FailureResult(result.Message);
+    }
 }

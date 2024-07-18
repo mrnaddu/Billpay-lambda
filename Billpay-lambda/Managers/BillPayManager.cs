@@ -143,4 +143,16 @@ public class BillPayManager
             return ResultDto<List<BillerInfoDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
+
+    public ResultDto<String> StoreUserPreference(Guid userId, List<Guid> terminalIds)
+    {
+        try
+        {
+            return ResultDto<String>.SuccessResult($"Successfully stored user preference for the user {userId} with the terminals {terminalIds}");
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<String>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
 }

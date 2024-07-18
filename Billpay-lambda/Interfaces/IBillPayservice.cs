@@ -11,4 +11,6 @@ public interface IBillPayservice
     ResultDto<List<BillerInfoDto>> GetTopBillers(Guid terminalId);
     ResultDto<BillerInfoDto> GetBiller(Guid billerId);
     ResultDto<List<BillerInfoDto>> GetBillerCategory(string category);
+    ResultDto<string> StoreUserPreference(UserPreferenceInputDto input);
+
 }
