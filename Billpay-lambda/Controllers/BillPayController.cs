@@ -49,9 +49,9 @@ public class BillPayController : ControllerBase
     [Route("get-top-billers")]
     [SwaggerOperation(Summary = "Get top billers")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult GetTopBillers()
+    public IActionResult GetTopBillers(Guid terminalId)
     {
-        var result = billPayservice.GetTopBillers();
+        var result = billPayservice.GetTopBillers(terminalId);
         if (result.Success)
             return Ok(result);
         else

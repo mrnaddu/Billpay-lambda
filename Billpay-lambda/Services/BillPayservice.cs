@@ -40,9 +40,9 @@ public class BillPayservice : IBillPayservice
         return ResultDto<List<AtmDto>>.FailureResult(result.Message);
     }
 
-    public ResultDto<List<BillerInfoDto>> GetTopBillers()
+    public ResultDto<List<BillerInfoDto>> GetTopBillers(Guid terminalId)
     {
-        var result = billPayManager.GetTopBillers();
+        var result = billPayManager.GetTopBillers(terminalId);
         if (result.Success)
             return ResultDto<List<BillerInfoDto>>.SuccessResult(result.Data);
 

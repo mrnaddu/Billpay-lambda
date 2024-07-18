@@ -39,7 +39,7 @@ public class BillPayManager
             var matchingBillers = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId).ToList();
 
             if (matchingBillers.Count == 0)
-                throw new NotFoundException($"Biller Not found for selected terminal {terminalId}");
+                throw new NotFoundException($"Billers Not found for selected terminal {terminalId}");
 
             return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingBillers);
         }
@@ -49,13 +49,18 @@ public class BillPayManager
         }
     }
 
-    public ResultDto<List<BillerInfoDto>> GetTopBillers()
+    public ResultDto<List<BillerInfoDto>> GetTopBillers(Guid terminalId)
     {
         try
         {
             var billerList = BillerHelper.GetAllBillers();
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
+
+            var maxStubs = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId && biller.MaxStubs >= 1 && biller.MaxStubs <= 5).ToList();
+
+            if (maxStubs.Count == 0)
+                throw new NotFoundException($"Top billers Not found for selected terminal {terminalId}");
 
             return ResultDto<List<BillerInfoDto>>.SuccessResult(billerList);
         }
