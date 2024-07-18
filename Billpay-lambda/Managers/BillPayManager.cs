@@ -113,7 +113,7 @@ public class BillPayManager
         }
     }
 
-    public ResultDto<List<BillerInfoDto>> GetBillerCategory(string category)
+    public ResultDto<List<BillerInfoDto>> GetBillerCategory(Guid terminalId)
     {
         try
         {
@@ -121,7 +121,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller category list");
 
-            var matchingCategory = billerList.Where(biller => biller.Industries.Any(industry => industry.IndustryName == category)).ToList() ?? throw new NotFoundException($"Billers Not found for selected category {category}");
+            var matchingCategory = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId).GroupBy(cat => cat.Industries.FirstOrDefault()?.IndustryName).Select(group => group.FirstOrDefault()).ToList() ?? throw new NotFoundException($"Terminal Not found for selected terminal {terminalId}");
 
             return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingCategory);
         }
@@ -158,6 +158,24 @@ public class BillPayManager
         catch (Exception ex)
         {
             return ResultDto<UserPreferenceOutputDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<UserTransactionSummaryDto> GetTransactionSummaries(Guid userId)
+    {
+        try
+        {
+            var userList = UserTransactionSummaryHelper.GetTransactionSummary();
+            if (userList.Count == 0)
+                throw new NotFoundException("There is error while fetching user list");
+
+            var matchingUser = userList.Where(user => user.UserUid == userId).FirstOrDefault() ?? throw new NotFoundException($"User Not found for selected user {userId}");
+
+            return ResultDto<UserTransactionSummaryDto>.SuccessResult(matchingUser);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<UserTransactionSummaryDto>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }

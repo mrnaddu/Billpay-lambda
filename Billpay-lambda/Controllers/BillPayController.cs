@@ -88,9 +88,9 @@ public class BillPayController : ControllerBase
     [Route("get-biller-category")]
     [SwaggerOperation(Summary = "Get biller category")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult GetBillerCategory(string category)
+    public IActionResult GetBillerCategory(Guid terminalId)
     {
-        var result = billPayservice.GetBillerCategory(category);
+        var result = billPayservice.GetBillerCategory(terminalId);
         if (result.Success)
             return Ok(result);
         else
@@ -117,6 +117,19 @@ public class BillPayController : ControllerBase
     public IActionResult GetUserPreference(Guid userId)
     {
         var result = billPayservice.GetUserPreference(userId);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpGet]
+    [Route("get-transaction-summary")]
+    [SwaggerOperation(Summary = "Get transaction summary")]
+    [ProducesResponseType(typeof(UserTransactionSummaryDto), StatusCodes.Status200OK)]
+    public IActionResult GetTransactionSummary(Guid userId)
+    {
+        var result = billPayservice.GeteTransactionSummaries(userId);
         if (result.Success)
             return Ok(result);
         else

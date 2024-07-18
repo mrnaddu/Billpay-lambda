@@ -10,7 +10,8 @@ public interface IBillPayservice
     ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input);
     ResultDto<List<BillerInfoDto>> GetTopBillers(Guid terminalId);
     ResultDto<BillerInfoDto> GetBiller(Guid billerId);
-    ResultDto<List<BillerInfoDto>> GetBillerCategory(string category);
+    ResultDto<List<BillerInfoDto>> GetBillerCategory(Guid terminalId);
     ResultDto<string> StoreUserPreference(UserPreferenceInputDto input);
     ResultDto<UserPreferenceOutputDto> GetUserPreference(Guid userId);
+    ResultDto<UserTransactionSummaryDto> GeteTransactionSummaries(Guid userId);
 }

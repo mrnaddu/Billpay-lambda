@@ -58,9 +58,9 @@ public class BillPayservice : IBillPayservice
         return ResultDto<ProcessBillPayDto>.FailureResult(result.Message);
     }
 
-    public ResultDto<List<BillerInfoDto>> GetBillerCategory(string category)
+    public ResultDto<List<BillerInfoDto>> GetBillerCategory(Guid terminalId)
     {
-        var result = billPayManager.GetBillerCategory(category);
+        var result = billPayManager.GetBillerCategory(terminalId);
         if (result.Success)
             return ResultDto<List<BillerInfoDto>>.SuccessResult(result.Data);
 
@@ -83,5 +83,10 @@ public class BillPayservice : IBillPayservice
             return ResultDto<UserPreferenceOutputDto>.SuccessResult(result.Data);
 
         return ResultDto<UserPreferenceOutputDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<UserTransactionSummaryDto> GeteTransactionSummaries(Guid userId)
+    {
+        throw new NotImplementedException();
     }
 }
