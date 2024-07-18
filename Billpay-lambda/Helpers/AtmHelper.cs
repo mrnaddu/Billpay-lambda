@@ -6,7 +6,7 @@ public static class AtmHelper
 {
     private static readonly List<AtmDto> atmList =
     [
-        new AtmDto
+        new ()
         {
             Id = new Guid("03f7b867-3f3e-4fbb-961a-7fe4c9a9329f"),
             TermId = "T000000013",
@@ -42,7 +42,7 @@ public static class AtmHelper
             AvailableTransaction = true,
             CancelCapability = true
         },
-        new AtmDto
+        new ()
         {
             Id = new Guid("e8b6c62a-69b8-48c7-88f4-91f98272b694"),
             TermId = "T000000027",
@@ -78,7 +78,7 @@ public static class AtmHelper
             AvailableTransaction = true,
             CancelCapability = true
         },
-        new AtmDto
+        new ()
         {
             Id = new Guid("0c6e6b27-77b1-4b3f-94c3-5d3a6e8c0fe5"),
             TermId = "T000000011",
@@ -114,7 +114,7 @@ public static class AtmHelper
             AvailableTransaction = true,
             CancelCapability = false
         },
-        new AtmDto
+        new ()
         {
             Id = new Guid("1354a199-69e8-4a7d-9b6a-6a434029b9cc"),
             TermId = "T000000036",
@@ -150,7 +150,7 @@ public static class AtmHelper
             AvailableTransaction = true,
             CancelCapability = true
         },
-        new AtmDto
+        new ()
         {
             Id = new Guid("6b023e5b-06c5-4b1e-bc5d-6d46d0e3e3b6"),
             TermId = "T000000001",

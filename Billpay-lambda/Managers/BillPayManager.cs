@@ -15,10 +15,7 @@ public class BillPayManager
             if (atmList.Count == 0)
                 throw new NotFoundException("There is error while fetching atm list");
 
-            var matchingAtms = atmList.Where(atm => atm.Lat == lat && atm.Lng == lng).ToList();
-
-            if (matchingAtms.Count == 0)
-                throw new NotFoundException($"Terminal Not found for the lattitude: {lat}, longitude: {lng}");
+            var matchingAtms = atmList.Where(atm => atm.Lat == lat && atm.Lng == lng).ToList() ?? throw new NotFoundException($"Terminal Not found for the lattitude: {lat}, longitude: {lng}");
 
             return ResultDto<List<AtmDto>>.SuccessResult(matchingAtms);
         }
@@ -36,10 +33,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId).ToList();
-
-            if (matchingBillers.Count == 0)
-                throw new NotFoundException($"Billers Not found for selected terminal {terminalId}");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId).ToList() ?? throw new NotFoundException($"Billers Not found for selected terminal {terminalId}");
 
             return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingBillers);
         }
@@ -57,10 +51,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var maxStubs = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId && biller.MaxStubs >= 1 && biller.MaxStubs <= 5).ToList();
-
-            if (maxStubs.Count == 0)
-                throw new NotFoundException($"Top billers Not found for selected terminal {terminalId}");
+            var maxStubs = billerList.Where(biller => biller.ReferenceTerminalUid == terminalId && biller.MaxStubs >= 1 && biller.MaxStubs <= 5).ToList() ?? throw new NotFoundException($"Top billers Not found for selected terminal {terminalId}");
 
             return ResultDto<List<BillerInfoDto>>.SuccessResult(billerList);
         }
@@ -78,10 +69,7 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId).ToList();
-
-            if (matchingBillers.Count == 0)
-                throw new NotFoundException($"Biller Not found {billerId}");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId).ToList() ?? throw new NotFoundException($"Biller Not found {billerId}");
 
             return ResultDto<BillerInfoDto>.SuccessResult(matchingBillers.FirstOrDefault());
         }
@@ -100,9 +88,7 @@ public class BillPayManager
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary();
                 return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
             }
-            var billerList = BillerHelper.GetAllBillers();
-            if (billerList.Count == 0)
-                throw new NotFoundException("There is error while fetching biller list");
+            var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
 
             var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == input.BillerId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {input.BillerId}");
             if (matchingBillers.IsExtraData == false)
@@ -135,7 +121,8 @@ public class BillPayManager
             if (billerList.Count == 0)
                 throw new NotFoundException("There is error while fetching biller category list");
 
-            var matchingCategory = billerList.Where(biller => biller.Industries.Any(industry => industry.IndustryName == category)).ToList();
+            var matchingCategory = billerList.Where(biller => biller.Industries.Any(industry => industry.IndustryName == category)).ToList() ?? throw new NotFoundException($"Billers Not found for selected category {category}");
+
             return ResultDto<List<BillerInfoDto>>.SuccessResult(matchingCategory);
         }
         catch (Exception ex)
@@ -153,6 +140,24 @@ public class BillPayManager
         catch (Exception ex)
         {
             return ResultDto<String>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<UserPreferenceOutputDto> GetUserPreference(Guid userId)
+    {
+        try
+        {
+            var userList = UserPreferenceHelper.GetUserPreference();
+            if (userList.Count == 0)
+                throw new NotFoundException("There is error while fetching user list");
+
+            var matchingUser = userList.Where(user => user.UserUid == userId).FirstOrDefault() ?? throw new NotFoundException($"User Not found for selected user {userId}");
+
+            return ResultDto<UserPreferenceOutputDto>.SuccessResult(matchingUser);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<UserPreferenceOutputDto>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }

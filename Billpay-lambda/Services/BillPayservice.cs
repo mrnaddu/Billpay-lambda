@@ -75,4 +75,13 @@ public class BillPayservice : IBillPayservice
 
         return ResultDto<string>.FailureResult(result.Message);
     }
+
+    public ResultDto<UserPreferenceOutputDto> GetUserPreference(Guid userId)
+    {
+        var result = billPayManager.GetUserPreference(userId);
+        if (result.Success)
+            return ResultDto<UserPreferenceOutputDto>.SuccessResult(result.Data);
+
+        return ResultDto<UserPreferenceOutputDto>.FailureResult(result.Message);
+    }
 }

@@ -112,11 +112,11 @@ public class BillPayController : ControllerBase
 
     [HttpGet]
     [Route("get-user-preference")]
-    [SwaggerOperation(Summary = "Store user preference")]
-    [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
+    [SwaggerOperation(Summary = "Get user preference")]
+    [ProducesResponseType(typeof(UserPreferenceOutputDto), StatusCodes.Status200OK)]
     public IActionResult GetUserPreference(Guid userId)
     {
-        var result = billPayservice.StoreUserPreference(input);
+        var result = billPayservice.GetUserPreference(userId);
         if (result.Success)
             return Ok(result);
         else
