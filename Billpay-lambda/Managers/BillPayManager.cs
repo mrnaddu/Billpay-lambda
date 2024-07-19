@@ -202,4 +202,17 @@ public class BillPayManager
             return ResultDto<List<TransactionSummaryDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
+
+    public ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid userId)
+    {
+        try
+        {
+            var prestageHistory = TransactionHistoryHelper.GetTransactionHistory(userId) ?? throw new NotFoundException("There is error while fetching prestage list");
+            return ResultDto<List<TransactionSummaryDto>>.SuccessResult(prestageHistory);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<List<TransactionSummaryDto>>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
 }

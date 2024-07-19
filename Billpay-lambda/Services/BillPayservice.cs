@@ -112,8 +112,12 @@ public class BillPayservice : IBillPayservice
         return ResultDto<List<TransactionSummaryDto>>.FailureResult(result.Message);
     }
 
-    public ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid UserId)
+    public ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid userId)
     {
-        throw new NotImplementedException();
+        var result = billPayManager.GetTransactionHistory(userId);
+        if (result.Success)
+            return ResultDto<List<TransactionSummaryDto>>.SuccessResult(result.Data);
+
+        return ResultDto<List<TransactionSummaryDto>>.FailureResult(result.Message);
     }
 }

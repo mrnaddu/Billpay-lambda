@@ -4,9 +4,9 @@ namespace Billpay_lambda.Helpers;
 
 public static class TransactionHistoryHelper
 {
-    public static List<TransactionSummaryDto> GetPrestageHistory(Guid userId)
+    public static List<TransactionSummaryDto> GetTransactionHistory(Guid userId)
     {
-        var prestageHistory = new List<TransactionSummaryDto>
+        var transactionHistory = new List<TransactionSummaryDto>
     {
         new ()
         {
@@ -70,6 +70,6 @@ public static class TransactionHistoryHelper
         }
     };
 
-        return prestageHistory;
+        return transactionHistory;
     }
 }
