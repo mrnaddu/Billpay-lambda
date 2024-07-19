@@ -26,7 +26,24 @@ public class ProcessBillPayHelper
                 MinLength = 0,
                 WaterMark = "Select the delivery type",
                 Notification = null,
-                ExtraInfo = null
+                ExtraInfo = new (){
+                    ExtraData = [
+                        new (){
+
+                            Key = "SameDay,SameBusiness day(NC)",
+                            Value = "$4.00"
+                        },
+                        new (){
+                            Key = "NextDay,1 Business day",
+                            Value = "$0.00"
+                        },
+                        new(){
+                            Key = "Standard, 3 Business days",
+                            Value = "$3.00"
+                        }
+                        ]
+
+                }
             },
             new ()
             {
