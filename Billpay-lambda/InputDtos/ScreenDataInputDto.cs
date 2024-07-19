@@ -3,4 +3,5 @@
 public class ScreenDataInputDto
 {
     public List<DataElementInputDto> DataElements { get; set; }
+    public string ScreenType { get; set; }
 }

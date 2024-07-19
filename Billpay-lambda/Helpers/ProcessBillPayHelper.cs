@@ -4,99 +4,86 @@ namespace Billpay_lambda.Helpers;
 
 public class ProcessBillPayHelper
 {
-    public static ProcessBillPayDto GetWithoutExtraData()
+    public static ProcessBillPayDto GetWithoutExtraData(Guid terminalId, Guid billerId)
     {
-        return withoutExtraData;
-    }
-
-    public static ProcessBillPayDto GetWitExtraData()
-    {
-        return withExtraData;
-    }
-
-    public static ProcessBillPayDto GetCompilance()
-    {
-        return compilance;
-    }
-
-    public static ProcessBillPayDto GetTransactionSummary()
-    {
-        return transactionSummary;
-    }
-
-    // Details of each screen
-    private static readonly ProcessBillPayDto withoutExtraData = new()
-    {
-        TerminalId = Guid.NewGuid(),
-        BillerId = Guid.NewGuid(),
-        TransactionId = Guid.Empty,
-        ScreenData = new ScreenDataDto
+        var withoutExtradata = new ProcessBillPayDto()
         {
-            DataElements =
-            [
-                new ()
-                {
-                    Id = "DeliveryType",
-                    Label = "GetDeliveryType",
-                    IsNumber = false,
-                    IsRequired = true,
-                    ElementType = "dropdown",
-                    MaxLength = 0,
-                    MinLength = 0,
-                    WaterMark = "Select the delivery type",
-                    Notification = null,
-                    ExtraInfo = null
-                },
-                new ()
-                {
-                    Id = "AccountNumber",
-                    Label = "GetAccountNumber",
-                    IsNumber = true,
-                    IsRequired = true,
-                    ElementType = "number",
-                    MaxLength = 10,
-                    MinLength = 5,
-                    WaterMark = "enter the account number",
-                    Notification = null,
-                    ExtraInfo = null
-                },
-                new ()
-                {
-                    Id = "Amount",
-                    Label = "GetAmount",
-                    IsNumber = true,
-                    IsRequired = true,
-                    ElementType = "number",
-                    MaxLength = 10,
-                    MinLength = 5,
-                    WaterMark = "ente the amount",
-                    Notification =
-                    [
-                        new ()
-                        {
-                            NotificationType = "info",
-                            NotificationDescription = "Your biller will credit you for access the amount."
-                        }
-                    ],
-                    ExtraInfo = new ExtraInfoDto
+            TerminalId = terminalId,
+            BillerId = billerId,
+            TransactionId = Guid.Empty,
+            ScreenData = new()
+            {
+                DataElements =
+        [
+            new ()
+            {
+                Id = "DeliveryType",
+                Label = "GetDeliveryType",
+                IsNumber = false,
+                IsRequired = true,
+                ElementType = "dropdown",
+                MaxLength = 0,
+                MinLength = 0,
+                WaterMark = "Select the delivery type",
+                Notification = null,
+                ExtraInfo = null
+            },
+            new ()
+            {
+                Id = "AccountNumber",
+                Label = "GetAccountNumber",
+                IsNumber = true,
+                IsRequired = true,
+                ElementType = "number",
+                MaxLength = 10,
+                MinLength = 5,
+                WaterMark = "enter the account number",
+                Notification = null,
+                ExtraInfo = null
+            },
+            new ()
+            {
+                Id = "Amount",
+                Label = "GetAmount",
+                IsNumber = true,
+                IsRequired = true,
+                ElementType = "number",
+                MaxLength = 10,
+                MinLength = 5,
+                WaterMark = "enter the amount",
+                Notification =
+                [
+                    new ()
                     {
-                        Denominator = 4
+                        NotificationType = "info",
+                        NotificationDescription = "Your biller will credit you for accessing the amount."
                     }
+                ],
+                ExtraInfo = new ()
+                {
+                    Denominator = 4
                 }
-            ],
-            ScreenId = 1,
-            ScreenType = "WithoutExtraData"
-        },
-    };
+            }
+        ],
+                ScreenId = 1,
+                ScreenType = "WithoutExtraData"
+            }
+        };
 
-    private static readonly ProcessBillPayDto withExtraData = new()
+        return withoutExtradata;
+
+    }
+
+    public static ProcessBillPayDto GetWitExtraData(Guid terminalId, Guid billerId)
     {
-        TerminalId = Guid.NewGuid(),
-        BillerId = Guid.NewGuid(),
-        TransactionId = Guid.Empty,
-        ScreenData = new ScreenDataDto
+        var withExtradata = new ProcessBillPayDto()
         {
-            DataElements =
+            TerminalId = terminalId,
+            BillerId = billerId,
+            TransactionId = Guid.Empty,
+            ScreenData = new ScreenDataDto
+            {
+                DataElements =
         [
             new ()
                 {
@@ -125,19 +112,24 @@ public class ProcessBillPayHelper
                     ExtraInfo = null
                 }
         ],
-            ScreenId = 2,
-            ScreenType = "WithExtraData"
-        },
-    };
+                ScreenId = 2,
+                ScreenType = "WithExtraData"
+            }
+        };
 
-    private static readonly ProcessBillPayDto compilance = new()
+        return withExtradata;
+    }
+
+    public static ProcessBillPayDto GetCompilance(Guid terminalId, Guid billerId)
     {
-        TerminalId = Guid.NewGuid(),
-        BillerId = Guid.NewGuid(),
-        TransactionId = Guid.Empty,
-        ScreenData = new ScreenDataDto
+        var Compilance = new ProcessBillPayDto()
         {
-            DataElements =
+            TerminalId = terminalId,
+            BillerId = billerId,
+            TransactionId = Guid.Empty,
+            ScreenData = new ScreenDataDto
+            {
+                DataElements =
         [
             new ()
                 {
@@ -166,63 +158,37 @@ public class ProcessBillPayHelper
                     ExtraInfo = null
                 }
         ],
-            ScreenId = 3,
-            ScreenType = "Compilance"
-        },
-    };
+                ScreenId = 3,
+                ScreenType = "Compilance"
+            },
+        };
+        return Compilance;
+    }
 
-    private static readonly ProcessBillPayDto transactionSummary = new()
+    public static ProcessBillPayDto GetTransactionSummary()
     {
-        TerminalId = Guid.NewGuid(),
-        BillerId = Guid.NewGuid(),
-        TransactionId = Guid.NewGuid(),
-        ScreenData = new ScreenDataDto
+        var withoutExtradata = new ProcessBillPayDto()
         {
-            DataElements =
-            [
-                new ()
-                {
-                    Id = "AmountDue",
-                    Label = "GetAmountDue",
-                    IsNumber = true,
-                    IsRequired = true,
-                    ElementType = "number",
-                    MaxLength = 15,
-                    MinLength = 5,
-                    WaterMark =string.Empty,
-                    Notification = null,
-                    ExtraInfo = null
-                },
-                new ()
-                {
-                    Id = "TotalFee",
-                    Label = "GetTotalFee",
-                    IsNumber = false,
-                    IsRequired = true,
-                    ElementType = "number",
-                    MaxLength = 0,
-                    MinLength = 0,
-                    WaterMark = "",
-                    Notification = null,
-                    ExtraInfo = null
-                },
-                 new ()
-                {
-                    Id = "AddBills",
-                    Label = "GetAddBills",
-                    IsNumber = false,
-                    IsRequired = true,
-                    ElementType = "number",
-                    MaxLength = 0,
-                    MinLength = 0,
-                    WaterMark = "",
-                    Notification = null,
-                    ExtraInfo = null
-                }
-                ],
-            ScreenId = 4,
-            ScreenType = "TransactionSummary"
-        },
-    };
+            ScreenData = new ScreenDataDto()
+            {
+                DataElements = [
+                    new ()
+                    {
+                        Notification = [
+                            new ()
+                            {
+                                NotificationType = "info",
+                                NotificationDescription = "Successfully created transactions"
+                            }
+                        ],
+                        ExtraInfo = null
+                    }
+                    ]
+            }
+        };
+
+        return withoutExtradata;
+
+    }
 }
 

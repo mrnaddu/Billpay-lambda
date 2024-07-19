@@ -79,7 +79,7 @@ public class BillPayManager
         }
     }
 
-    public ResultDto<ProcessBillPayDto> ProcessBillpayDetails(ProcessBillPayInputDto input)
+    public ResultDto<ProcessBillPayDto> ProcessBillpayDetails(Guid terminalId, Guid billerId, ProcessBillPayInputDto input)
     {
         try
         {
@@ -90,20 +90,20 @@ public class BillPayManager
             }
             var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == input.BillerId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {input.BillerId}");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId && biller.ReferenceTerminalUid == terminalId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
             if (matchingBillers.IsExtraData == false)
             {
-                var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData();
+                var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
             }
             else if (matchingBillers.IsCompilance == true)
             {
-                var compilance = ProcessBillPayHelper.GetCompilance();
+                var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
             }
             else
             {
-                var withData = ProcessBillPayHelper.GetWitExtraData();
+                var withData = ProcessBillPayHelper.GetWitExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withData);
             }
         }

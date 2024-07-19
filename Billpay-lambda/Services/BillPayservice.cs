@@ -49,9 +49,9 @@ public class BillPayservice : IBillPayservice
         return ResultDto<List<BillerInfoDto>>.FailureResult(result.Message);
     }
 
-    public ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input)
+    public ResultDto<ProcessBillPayDto> ProcessBillpay(Guid terminalId, Guid billerId, ProcessBillPayInputDto input)
     {
-        var result = billPayManager.ProcessBillpayDetails(input);
+        var result = billPayManager.ProcessBillpayDetails(terminalId, billerId, input);
         if (result.Success)
             return ResultDto<ProcessBillPayDto>.SuccessResult(result.Data);
 
@@ -110,5 +110,10 @@ public class BillPayservice : IBillPayservice
             return ResultDto<List<TransactionSummaryDto>>.SuccessResult(result.Data);
 
         return ResultDto<List<TransactionSummaryDto>>.FailureResult(result.Message);
+    }
+
+    public ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid UserId)
+    {
+        throw new NotImplementedException();
     }
 }

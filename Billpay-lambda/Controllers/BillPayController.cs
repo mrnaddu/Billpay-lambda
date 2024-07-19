@@ -75,9 +75,9 @@ public class BillPayController : ControllerBase
     [Route("process-billpay")]
     [SwaggerOperation(Summary = "Process billpay")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult ProcessBillpay(ProcessBillPayInputDto request)
+    public IActionResult ProcessBillpay([FromHeader][Required] Guid terminalId, [FromHeader][Required] Guid billerId, ProcessBillPayInputDto request)
     {
-        var result = billPayservice.ProcessBillpay(request);
+        var result = billPayservice.ProcessBillpay(terminalId, billerId, request);
         if (result.Success)
             return Ok(result);
         else
@@ -152,10 +152,23 @@ public class BillPayController : ControllerBase
     [HttpGet]
     [Route("get-prestage-transaction")]
     [SwaggerOperation(Summary = "Get prestage transaction")]
-    [ProducesResponseType(typeof(PrestageTransactionOutputDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
     public IActionResult GetPrestageTransaction(Guid userId)
     {
         var result = billPayservice.GetPrestageTransaction(userId);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpGet]
+    [Route("get-transaction-history")]
+    [SwaggerOperation(Summary = "Get prestage transaction")]
+    [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
+    public IActionResult GetTransactionHistory(Guid userId)
+    {
+        var result = billPayservice.GetTransactionHistory(userId);
         if (result.Success)
             return Ok(result);
         else

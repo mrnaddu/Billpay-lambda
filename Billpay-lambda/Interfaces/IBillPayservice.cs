@@ -7,7 +7,7 @@ public interface IBillPayservice
 {
     ResultDto<List<AtmDto>> GetTerminal(double lat, double lng);
     ResultDto<List<BillerInfoDto>> GetAllBillers(Guid terminalId);
-    ResultDto<ProcessBillPayDto> ProcessBillpay(ProcessBillPayInputDto input);
+    ResultDto<ProcessBillPayDto> ProcessBillpay(Guid terminalId, Guid billerId, ProcessBillPayInputDto input);
     ResultDto<List<BillerInfoDto>> GetTopBillers(Guid terminalId);
     ResultDto<BillerInfoDto> GetBiller(Guid billerId);
     ResultDto<List<BillerInfoDto>> GetBillerCategory(Guid terminalId);
@@ -16,4 +16,5 @@ public interface IBillPayservice
     ResultDto<UserTransactionSummaryDto> GetTransactionSummaries(Guid userId);
     ResultDto<PrestageTransactionOutputDto> PrestageTransaction(PrestageTransactionInputDto input);
     ResultDto<List<TransactionSummaryDto>> GetPrestageTransaction(Guid UserId);
+    ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid UserId);
 }
