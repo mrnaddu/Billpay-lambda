@@ -5,6 +5,11 @@ namespace Billpay_lambda.Helpers;
 
 public static class BillerHelper
 {
+    public static List<BillerInfoDto> GetAllBillers()
+    {
+        return billerInfoList;
+    }
+
     private static readonly List<BillerInfoDto> billerInfoList =
     [
         new ()
@@ -160,9 +165,4 @@ public static class BillerHelper
             ModifiedBy = "AdminUser"
         }
     ];
-
-    public static List<BillerInfoDto> GetAllBillers()
-    {
-        return billerInfoList;
-    }
 }

@@ -129,7 +129,33 @@ public class BillPayController : ControllerBase
     [ProducesResponseType(typeof(UserTransactionSummaryDto), StatusCodes.Status200OK)]
     public IActionResult GetTransactionSummary(Guid userId)
     {
-        var result = billPayservice.GeteTransactionSummaries(userId);
+        var result = billPayservice.GetTransactionSummaries(userId);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpPost]
+    [Route("create-prestage-transaction")]
+    [SwaggerOperation(Summary = "Create prestage transaction")]
+    [ProducesResponseType(typeof(PrestageTransactionOutputDto), StatusCodes.Status200OK)]
+    public IActionResult PrestageTransaction(PrestageTransactionInputDto input)
+    {
+        var result = billPayservice.PrestageTransaction(input);
+        if (result.Success)
+            return Ok(result);
+        else
+            return StatusCode(500, new { ErrorMessage = result.Message });
+    }
+
+    [HttpGet]
+    [Route("get-prestage-transaction")]
+    [SwaggerOperation(Summary = "Get prestage transaction")]
+    [ProducesResponseType(typeof(PrestageTransactionOutputDto), StatusCodes.Status200OK)]
+    public IActionResult GetPrestageTransaction(Guid userId)
+    {
+        var result = billPayservice.GetPrestageTransaction(userId);
         if (result.Success)
             return Ok(result);
         else

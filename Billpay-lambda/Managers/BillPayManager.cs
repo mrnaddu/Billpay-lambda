@@ -165,9 +165,7 @@ public class BillPayManager
     {
         try
         {
-            var userList = UserTransactionSummaryHelper.GetTransactionSummary();
-            if (userList.Count == 0)
-                throw new NotFoundException("There is error while fetching user list");
+            var userList = UserTransactionSummaryHelper.GetTransactionSummary() ?? throw new NotFoundException("There is error while fetching user list");
 
             var matchingUser = userList.Where(user => user.UserUid == userId).FirstOrDefault() ?? throw new NotFoundException($"User Not found for selected user {userId}");
 
@@ -176,6 +174,32 @@ public class BillPayManager
         catch (Exception ex)
         {
             return ResultDto<UserTransactionSummaryDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<PrestageTransactionOutputDto> CreatePrestageTransaction(Guid userId, Guid TransactionId)
+    {
+        try
+        {
+            var prestageTransaction = PrestageTransactionHelper.CreatePrestageTransaction(userId, TransactionId);
+            return ResultDto<PrestageTransactionOutputDto>.SuccessResult(prestageTransaction);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<PrestageTransactionOutputDto>.FailureResult($"Exception: {ex.Message}");
+        }
+    }
+
+    public ResultDto<List<TransactionSummaryDto>> GetPrestageTransaction(Guid userId)
+    {
+        try
+        {
+            var prestageHistory = PrestageHistoryHelper.GetPrestageHistory(userId) ?? throw new NotFoundException("There is error while fetching prestage list");
+            return ResultDto<List<TransactionSummaryDto>>.SuccessResult(prestageHistory);
+        }
+        catch (Exception ex)
+        {
+            return ResultDto<List<TransactionSummaryDto>>.FailureResult($"Exception: {ex.Message}");
         }
     }
 }

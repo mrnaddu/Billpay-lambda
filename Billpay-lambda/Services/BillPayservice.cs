@@ -85,8 +85,30 @@ public class BillPayservice : IBillPayservice
         return ResultDto<UserPreferenceOutputDto>.FailureResult(result.Message);
     }
 
-    public ResultDto<UserTransactionSummaryDto> GeteTransactionSummaries(Guid userId)
+    public ResultDto<UserTransactionSummaryDto> GetTransactionSummaries(Guid userId)
     {
-        throw new NotImplementedException();
+        var result = billPayManager.GetTransactionSummaries(userId);
+        if (result.Success)
+            return ResultDto<UserTransactionSummaryDto>.SuccessResult(result.Data);
+
+        return ResultDto<UserTransactionSummaryDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<PrestageTransactionOutputDto> PrestageTransaction(PrestageTransactionInputDto input)
+    {
+        var result = billPayManager.CreatePrestageTransaction(input.UserId, input.TransactionId);
+        if (result.Success)
+            return ResultDto<PrestageTransactionOutputDto>.SuccessResult(result.Data);
+
+        return ResultDto<PrestageTransactionOutputDto>.FailureResult(result.Message);
+    }
+
+    public ResultDto<List<TransactionSummaryDto>> GetPrestageTransaction(Guid userId)
+    {
+        var result = billPayManager.GetPrestageTransaction(userId);
+        if (result.Success)
+            return ResultDto<List<TransactionSummaryDto>>.SuccessResult(result.Data);
+
+        return ResultDto<List<TransactionSummaryDto>>.FailureResult(result.Message);
     }
 }

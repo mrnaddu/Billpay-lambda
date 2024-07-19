@@ -4,6 +4,11 @@ namespace Billpay_lambda.Helpers;
 
 public static class AtmHelper
 {
+    public static List<AtmDto> GetAllAtms()
+    {
+        return atmList;
+    }
+
     private static readonly List<AtmDto> atmList =
     [
         new ()
@@ -187,9 +192,4 @@ public static class AtmHelper
             CancelCapability = false
         }
     ];
-
-    public static List<AtmDto> GetAllAtms()
-    {
-        return atmList;
-    }
 }
