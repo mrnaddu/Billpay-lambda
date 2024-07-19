@@ -94,9 +94,9 @@ public class BillPayservice : IBillPayservice
         return ResultDto<UserTransactionSummaryDto>.FailureResult(result.Message);
     }
 
-    public ResultDto<PrestageTransactionOutputDto> PrestageTransaction(PrestageTransactionInputDto input)
+    public ResultDto<PrestageTransactionOutputDto> PrestageTransaction(Guid userId, Guid TransactionId)
     {
-        var result = billPayManager.CreatePrestageTransaction(input.UserId, input.TransactionId);
+        var result = billPayManager.CreatePrestageTransaction(userId, TransactionId);
         if (result.Success)
             return ResultDto<PrestageTransactionOutputDto>.SuccessResult(result.Data);
 

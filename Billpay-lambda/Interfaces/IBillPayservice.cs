@@ -14,7 +14,7 @@ public interface IBillPayservice
     ResultDto<string> StoreUserPreference(UserPreferenceInputDto input);
     ResultDto<UserPreferenceOutputDto> GetUserPreference(Guid userId);
     ResultDto<UserTransactionSummaryDto> GetTransactionSummaries(Guid userId);
-    ResultDto<PrestageTransactionOutputDto> PrestageTransaction(PrestageTransactionInputDto input);
+    ResultDto<PrestageTransactionOutputDto> PrestageTransaction(Guid userId, Guid terminalId);
     ResultDto<List<TransactionSummaryDto>> GetPrestageTransaction(Guid UserId);
     ResultDto<List<TransactionSummaryDto>> GetTransactionHistory(Guid UserId);
 }

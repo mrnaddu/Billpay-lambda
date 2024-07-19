@@ -88,7 +88,7 @@ public class BillPayController : ControllerBase
     [Route("get-biller-category")]
     [SwaggerOperation(Summary = "Get biller category")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult GetBillerCategory(Guid terminalId)
+    public IActionResult GetBillerCategory([Required] Guid terminalId)
     {
         var result = billPayservice.GetBillerCategory(terminalId);
         if (result.Success)
@@ -114,7 +114,7 @@ public class BillPayController : ControllerBase
     [Route("get-user-preference")]
     [SwaggerOperation(Summary = "Get user preference")]
     [ProducesResponseType(typeof(UserPreferenceOutputDto), StatusCodes.Status200OK)]
-    public IActionResult GetUserPreference(Guid userId)
+    public IActionResult GetUserPreference([Required] Guid userId)
     {
         var result = billPayservice.GetUserPreference(userId);
         if (result.Success)
@@ -127,7 +127,7 @@ public class BillPayController : ControllerBase
     [Route("get-transaction-summary")]
     [SwaggerOperation(Summary = "Get transaction summary")]
     [ProducesResponseType(typeof(UserTransactionSummaryDto), StatusCodes.Status200OK)]
-    public IActionResult GetTransactionSummary(Guid userId)
+    public IActionResult GetTransactionSummary([Required] Guid userId)
     {
         var result = billPayservice.GetTransactionSummaries(userId);
         if (result.Success)
@@ -140,9 +140,9 @@ public class BillPayController : ControllerBase
     [Route("create-prestage-transaction")]
     [SwaggerOperation(Summary = "Create prestage transaction")]
     [ProducesResponseType(typeof(PrestageTransactionOutputDto), StatusCodes.Status200OK)]
-    public IActionResult PrestageTransaction(PrestageTransactionInputDto input)
+    public IActionResult PrestageTransaction([Required] Guid userId, [Required] Guid transactionId)
     {
-        var result = billPayservice.PrestageTransaction(input);
+        var result = billPayservice.PrestageTransaction(userId, transactionId);
         if (result.Success)
             return Ok(result);
         else
@@ -153,7 +153,7 @@ public class BillPayController : ControllerBase
     [Route("get-prestage-transaction")]
     [SwaggerOperation(Summary = "Get prestage transaction")]
     [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
-    public IActionResult GetPrestageTransaction(Guid userId)
+    public IActionResult GetPrestageTransaction([Required] Guid userId)
     {
         var result = billPayservice.GetPrestageTransaction(userId);
         if (result.Success)
@@ -166,7 +166,7 @@ public class BillPayController : ControllerBase
     [Route("get-transaction-history")]
     [SwaggerOperation(Summary = "Get prestage transaction")]
     [ProducesResponseType(typeof(List<TransactionSummaryDto>), StatusCodes.Status200OK)]
-    public IActionResult GetTransactionHistory(Guid userId)
+    public IActionResult GetTransactionHistory([Required] Guid userId)
     {
         var result = billPayservice.GetTransactionHistory(userId);
         if (result.Success)
