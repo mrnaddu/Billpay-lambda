@@ -2,7 +2,7 @@
 
 public class ProcessBillPayInputDto
 {
-    public Guid TransactionId { get; set; } = Guid.Empty;
-    public bool IsTransactionSummary { get; set; } = false;
+    public Guid TransactionId { get; set; }
+    public bool IsTransactionSummary { get; set; }
     public ScreenDataInputDto ScreenData { get; set; }
 }

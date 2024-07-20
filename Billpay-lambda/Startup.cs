@@ -2,6 +2,7 @@
 using Billpay_lambda.Interfaces;
 using Billpay_lambda.Managers;
 using Billpay_lambda.Services;
+using Billpay_lambda.SwaggerHelpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -48,6 +49,8 @@ public class Startup
                     Title = "Billpay Web API",
                     Version = "v1"
                 });
+
+            options.SchemaFilter<ProcessBillPayInputDtoSchemaFilter>();
 
             // Configure Swagger to use JWT Bearer authentication
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
