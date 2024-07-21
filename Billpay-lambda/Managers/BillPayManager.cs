@@ -97,11 +97,33 @@ public class BillPayManager
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
             }
+
+            // Without ExtraData after valiadation
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType)
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber)
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount)
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
+                && de.Value == DataElementsValue.sameDay
+                || de.Value == DataElementsValue.nextDay
+                || de.Value == DataElementsValue.standardDay)
+
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber
+                && !string.IsNullOrEmpty(de.Value))
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount
+                && !string.IsNullOrEmpty(de.Value)
+                && decimal.TryParse(de.Value, out var amount)
+                && amount > 1000m)
+                && input.TransactionId != Guid.Empty)
+            {
+                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
+            }
+
+
+            if (matchingBillers.IsExtraData == false
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType && !string.IsNullOrEmpty(de.Value))
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber && !string.IsNullOrEmpty(de.Value))
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount && !string.IsNullOrEmpty(de.Value))
                 && input.TransactionId != Guid.Empty)
             {
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);

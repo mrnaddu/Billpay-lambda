@@ -5,13 +5,13 @@ namespace Billpay_lambda.Helpers;
 
 public class ProcessBillPayHelper
 {
-    public static ProcessBillPayDto GetWithoutExtraData(Guid terminalId, Guid billerId)
+    public static ProcessBillPayDto GetWithoutExtraData(Guid terminalId, Guid billerId, Guid? transactionId = null)
     {
         var withoutExtradata = new ProcessBillPayDto()
         {
             TerminalId = terminalId,
             BillerId = billerId,
-            TransactionId = Guid.Empty,
+            TransactionId = transactionId ?? Guid.Empty,
             TransactionStatus = "Started",
             TrnsactionMessage = "Transaction started with the WithoutExtra fields",
             ScreenData = new()
@@ -32,17 +32,13 @@ public class ProcessBillPayHelper
                 ExtraInfo = new (){
                     ExtraData = [
                         new (){
-
-                            Key = "SameDay,SameBusiness day(NC)",
-                            Value = "$4.00"
+                            Value = DataElementsValue.sameDay
                         },
                         new (){
-                            Key = "NextDay,1 Business day",
-                            Value = "$0.00"
+                            Value = DataElementsValue.nextDay
                         },
                         new(){
-                            Key = "Standard, 3 Business days",
-                            Value = "$3.00"
+                            Value = DataElementsValue.standardDay
                         }
                         ]
                 }
