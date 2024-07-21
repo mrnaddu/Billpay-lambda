@@ -12,6 +12,8 @@ public class ProcessBillPayHelper
             TerminalId = terminalId,
             BillerId = billerId,
             TransactionId = Guid.Empty,
+            TransactionStatus = "Started",
+            TrnsactionMessage = "Transaction started with the WithoutExtra fields",
             ScreenData = new()
             {
                 DataElements =
@@ -90,13 +92,15 @@ public class ProcessBillPayHelper
 
     }
 
-    public static ProcessBillPayDto GetWitExtraData(Guid terminalId, Guid billerId)
+    public static ProcessBillPayDto GetWithExtraData(Guid terminalId, Guid billerId)
     {
         var withExtradata = new ProcessBillPayDto()
         {
             TerminalId = terminalId,
             BillerId = billerId,
             TransactionId = Guid.Empty,
+            TransactionStatus = "Started",
+            TrnsactionMessage = "Transaction started with the WithExtra fields",
             ScreenData = new ScreenDataDto
             {
                 DataElements =
@@ -142,6 +146,8 @@ public class ProcessBillPayHelper
             TerminalId = terminalId,
             BillerId = billerId,
             TransactionId = Guid.Empty,
+            TransactionStatus = "Pending",
+            TrnsactionMessage = "Transaction started and more verifications required",
             ScreenData = new ScreenDataDto
             {
                 DataElements =
@@ -179,31 +185,19 @@ public class ProcessBillPayHelper
         return Compilance;
     }
 
-    public static ProcessBillPayDto GetTransactionSummary()
+    public static ProcessBillPayDto GetTransactionSummary(Guid terminalId, Guid billerId, Guid transactionId)
     {
-        var withoutExtradata = new ProcessBillPayDto()
+        var transactionSummary = new ProcessBillPayDto()
         {
-            ScreenData = new ScreenDataDto()
-            {
-                DataElements = [
-                    new ()
-                    {
-                        Notification = [
-                            new ()
-                            {
-                                NotificationType = "info",
-                                NotificationDescription = "Successfully created transactions"
-                            }
-                        ],
-                        ExtraInfo = null
-                    }
-                    ],
-                ScreenType = ScreenTypes.TransactionSummary
-            }
+            TerminalId = terminalId,
+            BillerId = billerId,
+            TransactionId = transactionId,
+            TransactionStatus = "Created",
+            TrnsactionMessage = "Transaction  created, And create a prestage code",
+            ScreenData = null
         };
 
-        return withoutExtradata;
-
+        return transactionSummary;
     }
 }
 

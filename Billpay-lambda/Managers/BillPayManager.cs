@@ -87,16 +87,15 @@ public class BillPayManager
             var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
             var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId && biller.ReferenceTerminalUid == terminalId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
 
-            if (input.IsTransactionSummary == true && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary && input.TransactionId != Guid.Empty)
-            {
-                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary();
-                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
-            }
-
             if (matchingBillers.IsExtraData == false && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData)
             {
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
+            }
+            else if (matchingBillers.IsExtraData == false && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData && input.ScreenData.DataElements.Any(x => x.Label == "DeliveryType" && x.Label == "AccountNumber" && x.Label == "Amount") && input.TransactionId != Guid.Empty)
+            {
+                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
             }
             else if (matchingBillers.IsCompilance == true && input.ScreenData.ScreenType == ScreenTypes.Compilance)
             {
@@ -105,7 +104,7 @@ public class BillPayManager
             }
             else if (matchingBillers.IsExtraData == true && input.ScreenData.ScreenType == ScreenTypes.WithExtraData)
             {
-                var withData = ProcessBillPayHelper.GetWitExtraData(terminalId, billerId);
+                var withData = ProcessBillPayHelper.GetWithExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withData);
             }
             else
@@ -118,6 +117,7 @@ public class BillPayManager
             return ResultDto<ProcessBillPayDto>.FailureResult($"Exception: {ex.Message}");
         }
     }
+
 
     public ResultDto<List<BillerInfoDto>> GetBillerCategory(Guid terminalId)
     {

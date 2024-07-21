@@ -15,7 +15,7 @@ public class ProcessBillPayInputDtoSchemaFilter : ISchemaFilter
             {
                 ["transactionid"] = new OpenApiString(Guid.Empty.ToString()),
                 ["istransactionsummary"] = new OpenApiBoolean(false),
-                ["screenData"] = new OpenApiObject
+                ["screendata"] = new OpenApiObject
                 {
                     ["dataelements"] = new OpenApiArray
                 {
