@@ -96,7 +96,7 @@ public class BillPayManager
             // Without ExtraData fileds
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
-                && input.ScreenData.DataElements == null)
+                && input.ScreenData.DataElements.Any(x => x.Value == string.Empty))
             {
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
@@ -130,7 +130,7 @@ public class BillPayManager
 
             // Without ExtraData for compliance validation and return transaction summary
             if (matchingBillers.IsExtraData == false
-                && input.ScreenData.ScreenType == ScreenTypes.Compilance
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
 
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.GovermentNumber
@@ -150,7 +150,7 @@ public class BillPayManager
 
             // Without ExtraData for transaction summary
             if (matchingBillers.IsExtraData == false
-                && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
                 && de.Value == DataElementsValue.sameDay
@@ -235,7 +235,7 @@ public class BillPayManager
 
             // With ExtraData for compliance validation and return transaction summary
             if (matchingBillers.IsExtraData == true
-                && input.ScreenData.ScreenType == ScreenTypes.Compilance
+                && input.ScreenData.ScreenType == ScreenTypes.WithExtraData
 
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.GovermentNumber
@@ -255,7 +255,7 @@ public class BillPayManager
 
             // With ExtraData for transaction summary
             if (matchingBillers.IsExtraData == true
-                && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary
+                && input.ScreenData.ScreenType == ScreenTypes.WithExtraData
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
                 && de.Value == DataElementsValue.sameDay

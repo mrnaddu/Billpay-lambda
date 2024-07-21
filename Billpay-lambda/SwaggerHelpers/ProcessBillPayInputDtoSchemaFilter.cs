@@ -14,7 +14,6 @@ public class ProcessBillPayInputDtoSchemaFilter : ISchemaFilter
             schema.Example = new OpenApiObject
             {
                 ["transactionid"] = new OpenApiString(Guid.Empty.ToString()),
-                ["istransactionsummary"] = new OpenApiBoolean(false),
                 ["screendata"] = new OpenApiObject
                 {
                     ["dataelements"] = new OpenApiArray
