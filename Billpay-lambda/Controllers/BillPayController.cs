@@ -35,7 +35,7 @@ public class BillPayController : ControllerBase
     [Route("search-billers")]
     [SwaggerOperation(Summary = "Search billers")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult SearchBillers(Guid terminalId)
+    public IActionResult SearchBillers([Required] Guid terminalId)
     {
         var result = billPayservice.GetAllBillers(terminalId);
         if (result.Success)
@@ -48,7 +48,7 @@ public class BillPayController : ControllerBase
     [Route("get-top-billers")]
     [SwaggerOperation(Summary = "Get top billers")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult GetTopBillers(Guid terminalId)
+    public IActionResult GetTopBillers([Required] Guid terminalId)
     {
         var result = billPayservice.GetTopBillers(terminalId);
         if (result.Success)
@@ -61,7 +61,7 @@ public class BillPayController : ControllerBase
     [Route("get-biller")]
     [SwaggerOperation(Summary = "Get biller")]
     [ProducesResponseType(typeof(BillerInfoDto), StatusCodes.Status200OK)]
-    public IActionResult GetBiller(Guid billerId)
+    public IActionResult GetBiller([Required] Guid billerId)
     {
         var result = billPayservice.GetBiller(billerId);
         if (result.Success)
