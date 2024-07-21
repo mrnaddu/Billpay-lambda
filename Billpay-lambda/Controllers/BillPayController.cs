@@ -2,7 +2,6 @@
 using Billpay_lambda.InputDtos;
 using Billpay_lambda.Interfaces;
 using Billpay_lambda.OutputDtos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -10,7 +9,7 @@ namespace Billpay_lambda.Controllers;
 
 [Route("api/bill-pay")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class BillPayController : ControllerBase
 {
     private readonly IBillPayservice billPayservice;
