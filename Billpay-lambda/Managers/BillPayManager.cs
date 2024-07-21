@@ -84,15 +84,25 @@ public class BillPayManager
     {
         try
         {
-            var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
-            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId && biller.ReferenceTerminalUid == terminalId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
+            var billerList = BillerHelper.GetAllBillers()
+                ?? throw new NotFoundException("There is error while fetching biller list");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId
+            && biller.ReferenceTerminalUid == terminalId).FirstOrDefault()
+            ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
 
-            if (matchingBillers.IsExtraData == false && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData && input.ScreenData.DataElements == null)
+            if (matchingBillers.IsExtraData == false
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                && input.ScreenData.DataElements == null)
             {
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
             }
-            if (matchingBillers.IsExtraData == false && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData && input.ScreenData.DataElements.Any(x => x.Label == "DeliveryType") && input.TransactionId != Guid.Empty)
+            if (matchingBillers.IsExtraData == false
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                && input.ScreenData.DataElements.Any(de => de.Label == "DeliveryType")
+                && input.ScreenData.DataElements.Any(de => de.Label == "AccountNumber")
+                && input.ScreenData.DataElements.Any(de => de.Label == "Amount")
+                && input.TransactionId != Guid.Empty)
             {
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
