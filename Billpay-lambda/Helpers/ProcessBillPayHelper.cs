@@ -20,7 +20,7 @@ public class ProcessBillPayHelper
         [
             new ()
             {
-                Id = "DeliveryType",
+                Id = DataElementsLabel.DeliveryType,
                 Label = "GetDeliveryType",
                 IsNumber = false,
                 IsRequired = true,
@@ -49,7 +49,7 @@ public class ProcessBillPayHelper
             },
             new ()
             {
-                Id = "AccountNumber",
+                Id = DataElementsLabel.AccountNumber,
                 Label = "GetAccountNumber",
                 IsNumber = true,
                 IsRequired = true,
@@ -62,7 +62,7 @@ public class ProcessBillPayHelper
             },
             new ()
             {
-                Id = "Amount",
+                Id = DataElementsLabel.Amount,
                 Label = "GetAmount",
                 IsNumber = true,
                 IsRequired = true,

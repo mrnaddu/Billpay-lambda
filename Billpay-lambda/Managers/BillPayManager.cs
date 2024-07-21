@@ -99,9 +99,9 @@ public class BillPayManager
             }
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
-                && input.ScreenData.DataElements.Any(de => de.Label == "DeliveryType")
-                && input.ScreenData.DataElements.Any(de => de.Label == "AccountNumber")
-                && input.ScreenData.DataElements.Any(de => de.Label == "Amount")
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType)
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber)
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount)
                 && input.TransactionId != Guid.Empty)
             {
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
