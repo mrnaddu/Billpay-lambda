@@ -130,7 +130,7 @@ public class BillPayManager
 
             // Without ExtraData for compliance validation and return transaction summary
             if (matchingBillers.IsExtraData == false
-                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                && input.ScreenData.ScreenType == ScreenTypes.Compilance
 
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.GovermentNumber
@@ -150,7 +150,7 @@ public class BillPayManager
 
             // Without ExtraData for transaction summary
             if (matchingBillers.IsExtraData == false
-                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary
                 // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
                 && de.Value == DataElementsValue.sameDay
@@ -173,16 +173,111 @@ public class BillPayManager
 
             #endregion
 
-            if (matchingBillers.IsCompilance == true && input.ScreenData.ScreenType == ScreenTypes.Compilance)
-            {
-                var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
-                return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
-            }
-            if (matchingBillers.IsExtraData == true && input.ScreenData.ScreenType == ScreenTypes.WithExtraData)
+
+            #region With Extra Data
+            // With ExtraData fields
+            if (matchingBillers.IsExtraData == true
+                && input.ScreenData.ScreenType == ScreenTypes.WithExtraData
+                && input.ScreenData.DataElements == null)
             {
                 var withData = ProcessBillPayHelper.GetWithExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withData);
             }
+
+            // With ExtraData for basic fields
+            if (matchingBillers.IsExtraData == false
+                && input.ScreenData.ScreenType == ScreenTypes.WithExtraData
+
+                // division number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DivisionNumber
+                && de.Value == DataElementsValue.dev1
+                || de.Value == DataElementsValue.dev2
+                || de.Value == DataElementsValue.dev3)
+
+                // states
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.SelectState
+                && de.Value == DataElementsValue.NYK
+                || de.Value == DataElementsValue.ALA
+                || de.Value == DataElementsValue.TXS)
+
+                // transaction id
+                && input.TransactionId != Guid.Empty)
+            {
+                var compilance = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
+            }
+
+            // With ExtraData for compliance
+            if (matchingBillers.IsExtraData == true
+                && input.ScreenData.ScreenType == ScreenTypes.WithExtraData
+
+                // delivery type
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
+                && de.Value == DataElementsValue.sameDay
+                || de.Value == DataElementsValue.nextDay
+                || de.Value == DataElementsValue.standardDay)
+
+                // account number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber
+                && !string.IsNullOrEmpty(de.Value))
+
+                // amount
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount
+                && !string.IsNullOrEmpty(de.Value)
+                && decimal.TryParse(de.Value, out var amount)
+                && amount > 1000m)
+
+                && input.TransactionId != Guid.Empty)
+            {
+                var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
+            }
+
+            // With ExtraData for compliance validation and return transaction summary
+            if (matchingBillers.IsExtraData == true
+                && input.ScreenData.ScreenType == ScreenTypes.Compilance
+
+                // delivery type
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.GovermentNumber
+                && !string.IsNullOrEmpty(de.Value)
+                && IsValidGovernmentNumber(de.Value))
+
+                // account number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DateOfBirth
+                && !string.IsNullOrEmpty(de.Value)
+                && IsValidDateOfBirth(de.Value))
+
+                && input.TransactionId != Guid.Empty)
+            {
+                var compilanceTrnsactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(compilanceTrnsactionSummary);
+            }
+
+            // With ExtraData for transaction summary
+            if (matchingBillers.IsExtraData == true
+                && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary
+                // delivery type
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
+                && de.Value == DataElementsValue.sameDay
+                || de.Value == DataElementsValue.nextDay
+                || de.Value == DataElementsValue.standardDay)
+
+                // account number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber
+                && !string.IsNullOrEmpty(de.Value))
+
+                // amount
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount
+                && !string.IsNullOrEmpty(de.Value))
+
+                && input.TransactionId != Guid.Empty)
+            {
+                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
+            }
+
+            #endregion
+
             else
             {
                 return ResultDto<ProcessBillPayDto>.FailureResult("No Results found for your input request , Please verify the input request");

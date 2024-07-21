@@ -10,4 +10,8 @@ public static class DataElementsLabel
     // compilance
     public const string GovermentNumber = "GovermentNumber";
     public const string DateOfBirth = "DateOfBirth";
+
+    // with extra data
+    public const string DivisionNumber = "DivisionNumber";
+    public const string SelectState = "SelectState";
 }

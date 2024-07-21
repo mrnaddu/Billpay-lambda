@@ -13,7 +13,7 @@ public class ProcessBillPayHelper
             BillerId = billerId,
             TransactionId = transactionId ?? Guid.Empty,
             TransactionStatus = "Started",
-            TrnsactionMessage = "Transaction started with the WithoutExtra fields",
+            TrnsactionMessage = "Transaction started with the basic fields",
             ScreenData = new()
             {
                 DataElements =
@@ -96,14 +96,14 @@ public class ProcessBillPayHelper
             BillerId = billerId,
             TransactionId = Guid.Empty,
             TransactionStatus = "Started",
-            TrnsactionMessage = "Transaction started with the WithExtra fields",
+            TrnsactionMessage = "Transaction started with the extra fields",
             ScreenData = new ScreenDataDto
             {
                 DataElements =
         [
             new ()
                 {
-                    Id = "DivisionNumber",
+                    Id = DataElementsLabel.DivisionNumber,
                     Label = "GetDivisionNumber",
                     IsNumber = false,
                     IsRequired = true,
@@ -112,11 +112,23 @@ public class ProcessBillPayHelper
                     MinLength = 0,
                     WaterMark = "Select the division number",
                     Notification = null,
-                    ExtraInfo = null
+                    ExtraInfo = new (){
+                    ExtraData = [
+                        new (){
+                            Value = DataElementsValue.dev1
+                        },
+                        new (){
+                            Value = DataElementsValue.dev2
+                        },
+                        new(){
+                            Value = DataElementsValue.dev3
+                        }
+                        ]
+                }
                 },
                 new ()
                 {
-                    Id = "SelectState",
+                    Id = DataElementsLabel.SelectState,
                     Label = "GetSelectState",
                     IsNumber = false,
                     IsRequired = true,
@@ -125,7 +137,19 @@ public class ProcessBillPayHelper
                     MinLength = 0,
                     WaterMark = "Select the state",
                     Notification = null,
-                    ExtraInfo = null
+                    ExtraInfo = new (){
+                    ExtraData = [
+                        new (){
+                            Value = DataElementsValue.NYK
+                        },
+                        new (){
+                            Value = DataElementsValue.ALA
+                        },
+                        new(){
+                            Value = DataElementsValue.TXS
+                        }
+                        ]
+                }
                 }
         ],
                 ScreenType = ScreenTypes.WithExtraData
