@@ -53,7 +53,9 @@ public class Startup
                     Version = "v1"
                 });
 
+            // Swagger schema filters
             options.SchemaFilter<ProcessBillPayInputDtoSchemaFilter>();
+            options.SchemaFilter<UserPreferenceInputDtoSchemaFilter>();
 
             // Configure Swagger to use JWT Bearer authentication
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

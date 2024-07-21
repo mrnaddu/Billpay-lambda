@@ -312,7 +312,10 @@ public class BillPayManager
     {
         try
         {
-            return ResultDto<String>.SuccessResult($"Successfully stored user preference for the user {userId} with the terminals {terminalIds}");
+            if (userId != Guid.Empty && terminalIds != null && terminalIds.Count > 0)
+                return ResultDto<String>.FailureResult("No Results found for your input request , Please verify the input request");
+            else
+                return ResultDto<String>.SuccessResult($"Successfully stored user preference for the user {userId} with the terminals {terminalIds}");
         }
         catch (Exception ex)
         {

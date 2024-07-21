@@ -69,7 +69,7 @@ public class BillPayservice : IBillPayservice
 
     public ResultDto<string> StoreUserPreference(UserPreferenceInputDto input)
     {
-        var result = billPayManager.StoreUserPreference(input.UserInoId, input.TenantIds);
+        var result = billPayManager.StoreUserPreference(input.UserId, input.TenantIds);
         if (result.Success)
             return ResultDto<string>.SuccessResult(result.Data);
 
