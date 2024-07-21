@@ -141,7 +141,7 @@ public class ProcessBillPayHelper
         {
             TerminalId = terminalId,
             BillerId = billerId,
-            TransactionId = Guid.Empty,
+            TransactionId = Guid.NewGuid(),
             TransactionStatus = "Pending",
             TrnsactionMessage = "Transaction started and more verifications required",
             ScreenData = new ScreenDataDto
@@ -150,7 +150,7 @@ public class ProcessBillPayHelper
         [
             new ()
                 {
-                    Id = "GovermentNumber",
+                    Id = DataElementsLabel.GovermentNumber,
                     Label = "GetGovermentNumber",
                     IsNumber = true,
                     IsRequired = true,
@@ -163,7 +163,7 @@ public class ProcessBillPayHelper
                 },
                 new ()
                 {
-                    Id = "DateOfBirth",
+                    Id = DataElementsLabel.DateOfBirth,
                     Label = "GetDateOfBirth",
                     IsNumber = false,
                     IsRequired = true,
@@ -181,13 +181,13 @@ public class ProcessBillPayHelper
         return Compilance;
     }
 
-    public static ProcessBillPayDto GetTransactionSummary(Guid terminalId, Guid billerId, Guid transactionId)
+    public static ProcessBillPayDto GetTransactionSummary(Guid terminalId, Guid billerId, Guid? transactionId = null)
     {
         var transactionSummary = new ProcessBillPayDto()
         {
             TerminalId = terminalId,
             BillerId = billerId,
-            TransactionId = transactionId,
+            TransactionId = transactionId ?? Guid.NewGuid(),
             TransactionStatus = "Created",
             TrnsactionMessage = "Transaction  created, And create a prestage code",
             ScreenData = null

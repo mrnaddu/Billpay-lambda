@@ -85,11 +85,15 @@ public class BillPayManager
         try
         {
             var billerList = BillerHelper.GetAllBillers()
+
                 ?? throw new NotFoundException("There is error while fetching biller list");
             var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId
             && biller.ReferenceTerminalUid == terminalId).FirstOrDefault()
+
             ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
 
+            #region Without extra data
+            // Without ExtraData fileds
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
                 && input.ScreenData.DataElements == null)
@@ -98,37 +102,77 @@ public class BillPayManager
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
             }
 
-            // Without ExtraData after valiadation
+            // Without ExtraData for compliance
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+
+                // delivery type
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
                 && de.Value == DataElementsValue.sameDay
                 || de.Value == DataElementsValue.nextDay
                 || de.Value == DataElementsValue.standardDay)
 
+                // account number
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber
                 && !string.IsNullOrEmpty(de.Value))
+
+                // amount
                 && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount
                 && !string.IsNullOrEmpty(de.Value)
                 && decimal.TryParse(de.Value, out var amount)
                 && amount > 1000m)
+
                 && input.TransactionId != Guid.Empty)
             {
-                var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
-                return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
+                var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
             }
 
-
+            // Without ExtraData for compliance validation and return transaction summary
             if (matchingBillers.IsExtraData == false
                 && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType && !string.IsNullOrEmpty(de.Value))
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber && !string.IsNullOrEmpty(de.Value))
-                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount && !string.IsNullOrEmpty(de.Value))
+
+                // delivery type
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.GovermentNumber
+                && !string.IsNullOrEmpty(de.Value)
+                && IsValidGovernmentNumber(de.Value))
+
+                // account number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DateOfBirth
+                && !string.IsNullOrEmpty(de.Value)
+                && IsValidDateOfBirth(de.Value))
+
+                && input.TransactionId != Guid.Empty)
+            {
+                var compilanceTrnsactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
+                return ResultDto<ProcessBillPayDto>.SuccessResult(compilanceTrnsactionSummary);
+            }
+
+            // Without ExtraData for transaction summary
+            if (matchingBillers.IsExtraData == false
+                && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData
+                // delivery type
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.DeliveryType
+                && de.Value == DataElementsValue.sameDay
+                || de.Value == DataElementsValue.nextDay
+                || de.Value == DataElementsValue.standardDay)
+
+                // account number
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.AccountNumber
+                && !string.IsNullOrEmpty(de.Value))
+
+                // amount
+                && input.ScreenData.DataElements.Any(de => de.Label == DataElementsLabel.Amount
+                && !string.IsNullOrEmpty(de.Value))
+
                 && input.TransactionId != Guid.Empty)
             {
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary(terminalId, billerId, input.TransactionId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
             }
+
+            #endregion
+
             if (matchingBillers.IsCompilance == true && input.ScreenData.ScreenType == ScreenTypes.Compilance)
             {
                 var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
@@ -252,5 +296,15 @@ public class BillPayManager
         {
             return ResultDto<List<TransactionSummaryDto>>.FailureResult($"Exception: {ex.Message}");
         }
+    }
+
+    private static bool IsValidGovernmentNumber(string governmentNumber)
+    {
+        return governmentNumber.Length >= 5;
+    }
+
+    public static bool IsValidDateOfBirth(string dateOfBirth)
+    {
+        return DateTime.TryParse(dateOfBirth, out DateTime dob) && dob < DateTime.Today;
     }
 }
