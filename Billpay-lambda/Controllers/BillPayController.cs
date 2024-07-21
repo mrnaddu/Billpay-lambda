@@ -75,9 +75,9 @@ public class BillPayController : ControllerBase
     [Route("process-billpay")]
     [SwaggerOperation(Summary = "Process billpay")]
     [ProducesResponseType(typeof(List<BillerInfoDto>), StatusCodes.Status200OK)]
-    public IActionResult ProcessBillpay([FromHeader][Required] Guid terminalId, [FromHeader][Required] Guid billerId, ProcessBillPayInputDto request)
+    public IActionResult ProcessBillpay([FromHeader][Required] Guid terminalId, [FromHeader][Required] Guid billerId, ProcessBillPayInputDto input)
     {
-        var result = billPayservice.ProcessBillpay(terminalId, billerId, request);
+        var result = billPayservice.ProcessBillpay(terminalId, billerId, input);
         if (result.Success)
             return Ok(result);
         else

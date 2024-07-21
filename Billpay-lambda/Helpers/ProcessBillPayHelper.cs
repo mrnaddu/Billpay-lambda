@@ -1,4 +1,5 @@
-﻿using Billpay_lambda.OutputDtos;
+﻿using Billpay_lambda.Consts;
+using Billpay_lambda.OutputDtos;
 
 namespace Billpay_lambda.Helpers;
 
@@ -42,7 +43,6 @@ public class ProcessBillPayHelper
                             Value = "$3.00"
                         }
                         ]
-
                 }
             },
             new ()
@@ -82,8 +82,7 @@ public class ProcessBillPayHelper
                 }
             }
         ],
-                ScreenId = 1,
-                ScreenType = "WithoutExtraData"
+                ScreenType = ScreenTypes.WithoutExtraData
             }
         };
 
@@ -129,8 +128,7 @@ public class ProcessBillPayHelper
                     ExtraInfo = null
                 }
         ],
-                ScreenId = 2,
-                ScreenType = "WithExtraData"
+                ScreenType = ScreenTypes.WithExtraData
             }
         };
 
@@ -175,8 +173,7 @@ public class ProcessBillPayHelper
                     ExtraInfo = null
                 }
         ],
-                ScreenId = 3,
-                ScreenType = "Compilance"
+                ScreenType = ScreenTypes.Compilance
             },
         };
         return Compilance;
@@ -200,7 +197,8 @@ public class ProcessBillPayHelper
                         ],
                         ExtraInfo = null
                     }
-                    ]
+                    ],
+                ScreenType = ScreenTypes.TransactionSummary
             }
         };
 

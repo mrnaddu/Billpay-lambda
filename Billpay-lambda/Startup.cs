@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
 using Billpay_lambda.Interfaces;
 using Billpay_lambda.Managers;
 using Billpay_lambda.Services;
 using Billpay_lambda.SwaggerHelpers;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,6 +23,7 @@ public class Startup
     {
         services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
         services.AddCognitoIdentity();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddAuthentication(options =>
         {

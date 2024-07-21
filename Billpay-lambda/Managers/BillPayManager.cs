@@ -1,4 +1,5 @@
-﻿using Billpay_lambda.Exceptions;
+﻿using Billpay_lambda.Consts;
+using Billpay_lambda.Exceptions;
 using Billpay_lambda.Helpers;
 using Billpay_lambda.InputDtos;
 using Billpay_lambda.OutputDtos;
@@ -83,28 +84,33 @@ public class BillPayManager
     {
         try
         {
-            if (input.IsTransactionSummary == true)
+            var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
+            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId && biller.ReferenceTerminalUid == terminalId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
+
+            if (input.IsTransactionSummary == true && input.ScreenData.ScreenType == ScreenTypes.TransactionSummary && input.TransactionId != Guid.Empty)
             {
                 var transactionSummary = ProcessBillPayHelper.GetTransactionSummary();
                 return ResultDto<ProcessBillPayDto>.SuccessResult(transactionSummary);
             }
-            var billerList = BillerHelper.GetAllBillers() ?? throw new NotFoundException("There is error while fetching biller list");
 
-            var matchingBillers = billerList.Where(biller => biller.ReferenceBillerUid == billerId && biller.ReferenceTerminalUid == terminalId).FirstOrDefault() ?? throw new NotFoundException($"Biller Not found for selected terminal {terminalId} and biller {billerId}");
-            if (matchingBillers.IsExtraData == false)
+            if (matchingBillers.IsExtraData == false && input.ScreenData.ScreenType == ScreenTypes.WithoutExtraData)
             {
                 var withoutExtraData = ProcessBillPayHelper.GetWithoutExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withoutExtraData);
             }
-            else if (matchingBillers.IsCompilance == true)
+            else if (matchingBillers.IsCompilance == true && input.ScreenData.ScreenType == ScreenTypes.Compilance)
             {
                 var compilance = ProcessBillPayHelper.GetCompilance(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(compilance);
             }
-            else
+            else if (matchingBillers.IsExtraData == true && input.ScreenData.ScreenType == ScreenTypes.WithExtraData)
             {
                 var withData = ProcessBillPayHelper.GetWitExtraData(terminalId, billerId);
                 return ResultDto<ProcessBillPayDto>.SuccessResult(withData);
+            }
+            else
+            {
+                return ResultDto<ProcessBillPayDto>.FailureResult("No Results found for your input request , Please verify the input request");
             }
         }
         catch (Exception ex)

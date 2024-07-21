@@ -13,7 +13,7 @@ public class ProcessBillPayInputDtoSchemaFilter : ISchemaFilter
         {
             schema.Example = new OpenApiObject
             {
-                ["transactionid"] = new OpenApiString("00000000-0000-0000-0000-000000000000"),
+                ["transactionid"] = new OpenApiString(Guid.Empty.ToString()),
                 ["istransactionsummary"] = new OpenApiBoolean(false),
                 ["screenData"] = new OpenApiObject
                 {
